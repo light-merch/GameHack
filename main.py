@@ -33,19 +33,19 @@ if __name__ == "__main__":
             if i.type == pygame.QUIT:
                 done = True
             elif i.type == pygame.KEYDOWN:
-                if i.key == 1073741906:
+                if i.key == pygame.K_w:
                     print('up')
                     player1.y -= 10
 
-                elif i.key == 1073741905:
+                elif i.key == pygame.K_s:
                     print('down')
                     player1.y += 10
 
-                elif i.key == 1073741904:
+                elif i.key == pygame.K_a:
                     print('left')
                     player1.x -= 10
 
-                elif i.key == 1073741903:
+                elif i.key == pygame.K_d:
                     print('right')
                     player1.x += 10
 
