@@ -23,12 +23,14 @@ class guard():
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode(SIZE)
-    screen.fill(CL)
-    pygame.display.update()
+
     image = pygame.image.load("guard1.png")
+    image = pygame.transform.scale(image, (34,44))
+    back = pygame.image.load("floor.png")
+    back = pygame.transform.scale(back, SIZE)
+    screen = pygame.display.set_mode(SIZE)
     player1 = guard(START_X, START_Y)
-    fps = 240
+    fps = 500
     left, right, up, down = False, False, False, False
 
     done = False
@@ -65,7 +67,7 @@ if __name__ == "__main__":
             player1.y += 1
 
         pygame.time.wait(1000 // fps)
-        screen.fill(CL)
+        screen.blit(back,[0,0])
         screen.blit(image, (player1.x, player1.y))
         pygame.display.update()
 
