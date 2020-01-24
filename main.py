@@ -2,8 +2,21 @@ import pygame
 import numpy as np
 import math
 
-SIZE = (600, 600)
+SIZE = (1024, 768)
 CL = (33, 33, 33)
+BG_COLOR = (249, 166, 2)
+START_X = 500
+START_Y = 400
+
+class agent():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class guard():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 if __name__ == "__main__":
     pygame.init()
@@ -11,13 +24,33 @@ if __name__ == "__main__":
     screen.fill(CL)
     pygame.display.update()
     
+    player1 = guard(START_X, START_Y)
+    # player2= guard(100, 200)
+    
     done = False
     while not done:
         for i in pygame.event.get():  # events
             if i.type == pygame.QUIT:
                 done = True
-            elif i.type == pygame.MOUSEBUTTONDOWN:
-                if i.button == 1:
-                    pass
-    
+            elif i.type == pygame.KEYDOWN:
+                if i.key == 1073741906:
+                    print('up')
+                    player1.y -= 10
+
+                elif i.key == 1073741905:
+                    print('down')
+                    player1.y += 10
+
+                elif i.key == 1073741904:
+                    print('left')
+                    player1.x -= 10
+
+                elif i.key == 1073741903:
+                    print('right')
+                    player1.x += 10
+
+        
+        pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+        pygame.display.update()
+
     pygame.quit()
