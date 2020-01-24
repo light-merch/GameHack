@@ -28,31 +28,34 @@ if __name__ == "__main__":
     player1 = guard(START_X, START_Y)
     # player2= guard(100, 200)
     
+    pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+    pygame.display.update()
+                        
     done = False
     while not done:
         for i in pygame.event.get():  # events
             if i.type == pygame.QUIT:
                 done = True
             elif i.type == pygame.KEYDOWN:
-                if i.key == 1073741906:
+                if i.key == pygame.K_w:
                     print('up')
                     player1.y -= 10
                     pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
                     pygame.display.update()
 
-                elif i.key == 1073741905:
+                elif i.key == pygame.K_s:
                     print('down')
                     player1.y += 10
                     pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
                     pygame.display.update()
 
-                elif i.key == 1073741904:
+                elif i.key == pygame.K_a:
                     print('left')
                     player1.x -= 10
                     pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
                     pygame.display.update()
 
-                elif i.key == 1073741903:
+                elif i.key == pygame.K_d:
                     print('right')
                     player1.x += 10
                     pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
