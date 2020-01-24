@@ -26,9 +26,9 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(SIZE)
     screen.fill(CL)
     pygame.display.update()
+    image = pygame.image.load("guard1.png")
 
     player1 = guard(START_X, START_Y)
-    # player2= guard(100, 200)
     left, right, up, down = False, False, False, False
 
     done = False
@@ -56,16 +56,17 @@ if __name__ == "__main__":
                     right = False
 
         if right == True:
-            player1.x += 10
+            player1.x += 1
         if up == True:
-            player1.y -= 10
+            player1.y -= 1
         if left == True:
-            player1.x -= 10
+            player1.x -= 1
         if down == True:
-            player1.y += 10
+            player1.y += 1
 
-        pygame.time.wait(1000 // 60)
-        pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+        pygame.time.wait(1000 // 240)
+        screen.fill(CL)
+        screen.blit(image, (player1.x, player1.y))
         pygame.display.update()
 
     pygame.quit()
