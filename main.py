@@ -18,6 +18,7 @@ class guard():
         self.x = x
         self.y = y
 
+
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(SIZE)
@@ -36,21 +37,27 @@ if __name__ == "__main__":
                 if i.key == 1073741906:
                     print('up')
                     player1.y -= 10
+                    pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+                    pygame.display.update()
 
                 elif i.key == 1073741905:
                     print('down')
                     player1.y += 10
+                    pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+                    pygame.display.update()
 
                 elif i.key == 1073741904:
                     print('left')
                     player1.x -= 10
+                    pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+                    pygame.display.update()
 
                 elif i.key == 1073741903:
                     print('right')
                     player1.x += 10
+                    pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
+                    pygame.display.update()
 
         
-        pygame.draw.circle(screen, BG_COLOR, (player1.x, player1.y), 10, 0)
-        pygame.display.update()
 
     pygame.quit()
