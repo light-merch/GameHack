@@ -27,8 +27,8 @@ if __name__ == "__main__":
     screen.fill(CL)
     pygame.display.update()
     image = pygame.image.load("guard1.png")
-
     player1 = guard(START_X, START_Y)
+    fps = 240
     left, right, up, down = False, False, False, False
 
     done = False
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         if down == True:
             player1.y += 1
 
-        pygame.time.wait(1000 // 240)
+        pygame.time.wait(1000 // fps)
         screen.fill(CL)
         screen.blit(image, (player1.x, player1.y))
         pygame.display.update()
