@@ -228,6 +228,7 @@ if __name__ == "__main__":
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
+            map_builder(screen, mapp, fl)
             add_ghosts()
             player1.update(screen)
             ghosts_update(screen)
