@@ -10,7 +10,7 @@ SIZE = (1280, 1024)
 BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
-SS = 2  # Step Size
+SS = 4  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 22
@@ -48,11 +48,12 @@ class guard():
             if self.rot == 1:
                 for i in range(200):
                     for j in range(i):
-                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (100, 0, 0, 0))
+                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (100, 0, 0, 250))
             elif self.rot == 3:
                 for i in range(200):
                     for j in range(i):
-                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 0))
+                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 20))
+                        # screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 0))
 
 
 def add_ghosts():
@@ -217,11 +218,19 @@ def drawhearts(lives):
 
 if __name__ == "__main__":
     pygame.init()
-    # screen = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
-    screen.fill(BG_COLOR)
-    pygame.display.update()
-    
+    screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    # screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
+    screen_.fill(BG_COLOR)
+
+    screen = pygame.Surface(SIZE, pygame.SRCALPHA)
+
+    #pygame.draw.rect(screen,)
+    #screen.fill((0,0,0))
+    #screen_.blit(screen,SIZE)
+    #pygame.display.flip()
+    #pygame.display.update()
+    #import time
+    #time.sleep()
     arrMap = np.load('neww.npy')
     #arrMap = []
     #mapp = mar[1]
@@ -306,6 +315,8 @@ if __name__ == "__main__":
             add_ghosts()
             ghosts_update(screen)
             player1.update(screen)
+            # screen_.blit(screen, SIZE)
+            # pygame.display.flip()
             drawhearts(player1.lives)
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
@@ -327,8 +338,10 @@ if __name__ == "__main__":
                 pygame.time.wait(1000)
                 STATE = 'title'
             else:
-                screen.blit(deathpage, (0,0))
+                screen.blit(deathpage, (0, 0))
 
+        screen_.blit(screen, (0,0))
+        pygame.display.flip()
         pygame.display.update()
 
     pygame.quit()
