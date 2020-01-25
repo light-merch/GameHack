@@ -3,12 +3,12 @@ import numpy as np
 import math
 
 SIZE = (1024, 768)
-BG_COLOR = (100, 100, 100)
+BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
 
 
-class agent():
+class ghost():
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -29,6 +29,8 @@ if __name__ == "__main__":
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
+    image_left = pygame.image.load(r'guard3.png')
+    ghost = pygame.image.load(r'ghost.jpg')
     image = image_front
 
     player1 = guard(START_X, START_Y)
@@ -50,7 +52,7 @@ if __name__ == "__main__":
                     image = image_front
                 elif i.key == pygame.K_a:
                     left = True
-                    image = image_right
+                    image = image_left
                 elif i.key == pygame.K_d:
                     right = True
                     image = image_right
