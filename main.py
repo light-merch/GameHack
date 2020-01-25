@@ -13,7 +13,7 @@ START_Y = 400
 SS = 2  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
-N_BLOCKS = 18
+N_BLOCKS = 21
 
 class ghost():
     def __init__(self, x, y, side):
@@ -23,14 +23,15 @@ class ghost():
 
     def update(self):
         c = 0
-        dx = abs(player1.x - self.x)
-        dy = abs(player1.y - self.y)
-        # с = math.sqrt(dx * dx - dy * dy)
-        # k = c / BSS
-        # new_dx = dx // k
-        # new_dy = dy // k
-        self.x += 0 # new_dx
-        self.y += 0 # new_dy
+        dx = player1.x - self.x
+        dy = player1.y - self.y
+        angle = math.atan2(dy, dx)
+        print(angle / 3.14 * 180)
+
+        dx2 = math.cos(angle) * BSS
+        dy2 = math.sin(angle) * BSS
+        self.x += dx2 # new_dx
+        self.y += dy2 # new_dy
 
 
 class guard():
@@ -54,10 +55,10 @@ class guard():
 
 
 def add_ghosts():
-    if (randint(1, 100) == 1):
+    if (randint(0, 80) == 1):
         gx = player1.x
         gy = player1.y
-        while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 200:
+        while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 300:
             gx = randint(0, SIZE[0])
             gy = randint(0, SIZE[1])
 
@@ -219,6 +220,10 @@ if __name__ == "__main__":
 
     for i in range(15):
         fl.append(pygame.image.load(f'block{i + 1}.png'))
+
+    fl.append(pygame.image.load(r'gun.png'))
+    fl.append(pygame.image.load(r'hp.png'))
+    fl.append(pygame.image.load(r'battery.png'))
 
     player1 = guard(START_X, START_Y)
     fps = 1000
