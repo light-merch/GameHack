@@ -4,7 +4,9 @@ import math
 import datetime
 from random import randint
 
-SIZE = (1048, 1024)
+from map_builder import map_builder
+
+SIZE = (1280, 1024)
 BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
@@ -18,6 +20,10 @@ class ghost():
         self.y = y
         self.side = side
 
+    def update():
+        self.x
+        self.y
+
 
 class guard():
     def __init__(self, x, y):
@@ -28,25 +34,9 @@ class guard():
     def update(self, screen):
         screen.blit(image, (player1.x, player1.y))
         if player1.bulb:
-            for i in range(100):
+            for i in range(300):
                 for j in range(i):
                     screen.set_at((player1.x - i, player1.y - int(i / 2) + j + 50), (100, 0, 0))
-
-
-def map_builder(screen, mapp, floors):
-    for i in range(SIZE[0] // SIZE_BLOCK):
-        pygame.draw.line(screen, (255, 255, 255), [i * SIZE_BLOCK, 0], [i * SIZE_BLOCK, SIZE[1]], 2)
-
-    for i in range(SIZE[1] // SIZE_BLOCK):
-        pygame.draw.line(screen, (255, 255, 255), [0, i * SIZE_BLOCK], [SIZE[0], i * SIZE_BLOCK], 2)
-
-    for y in range(SIZE[1] // SIZE_BLOCK):
-        for x in range(SIZE[0] // SIZE_BLOCK):
-            for i in range(N_BLOCKS):
-                if mapp[y, x] == i + 1:
-                    screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
-
-    return mapp
 
 
 def add_ghosts():
