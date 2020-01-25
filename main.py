@@ -34,7 +34,7 @@ if __name__ == "__main__":
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
     image_left = pygame.image.load(r'guard3.png')
-    ghost_right = pygame.image.load(r'ghost2.png')
+    ghost_right = pygame.image.load(r'ghost1.png')
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
 
@@ -92,17 +92,25 @@ if __name__ == "__main__":
         if (randint(0, 100) == 1):
             gx = player1.x
             gy = player1.y
-            while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 100:
+            while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 200:
                 gx = randint(0, SIZE[0])
                 gy = randint(0, SIZE[1])
 
-            arrGhosts.append(ghost(gx, gy))
+            if (gx > player1.x):
+                arrGhosts.append(ghost(gx, gy, 'left'))
+            else:
+                arrGhosts.append(ghost(gx, gy, 'right'))
         
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
         screen.blit(image, (player1.x, player1.y))
+        if player1.bulb:
+            for i in range(100):
+                for j in range(i * 2):
+                    screen.set_at((player1.x + i, player1.y), (100, 0, 0))
+
         for item in arrGhosts:
-            if (elem.x > player1.x):
+            if (item.side == 'left'):
                 screen.blit(ghost_left, (item.x, item.y))
             else:
                 screen.blit(ghost_right, (item.x, item.y))
