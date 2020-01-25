@@ -11,6 +11,7 @@ BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
 SS = 2  # Step Size
+BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 18
 
@@ -20,9 +21,16 @@ class ghost():
         self.y = y
         self.side = side
 
-    def update():
-        self.x
-        self.y
+    '''def update(self):
+        c = 0
+        dx = abs(player1.x - self.x)
+        dy = abs(player1.y - self.y)
+        с = math.sqrt(dx * dx - dy * dy)
+        k = c / BSS
+        new_dx = dx // k
+        new_dy = dy // k
+        self.x += new_dx
+        self.y += new_dy'''
 
 
 class guard():
@@ -55,6 +63,7 @@ def add_ghosts():
 
 def ghosts_update(screen):
     for item in arrGhosts:
+        # item.update()
         if (item.side == 'left'):
             screen.blit(ghost_left, (item.x, item.y))
         else:
@@ -167,7 +176,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(SIZE)
     screen.fill(BG_COLOR)
     pygame.display.update()
-    mapp = np.zeros((SIZE[0] // SIZE_BLOCK, SIZE[1] // SIZE_BLOCK))
+    mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
