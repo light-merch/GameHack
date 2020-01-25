@@ -96,7 +96,11 @@ def title_screen(screen):
     text3 = f3.render("EXIT", 0, (0, 180, 0))
     screen.blit(text3, (540, 500))
 
-
+def death(arrGhosts,player, state):
+    for item in arrGhosts:
+        if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
+            return 'died'
+    return state
 
 def keybind(STATE, block_pos, i, done, left, right, up, down):
     global image
@@ -183,6 +187,8 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
         elif i.key == pygame.K_d:
             right = False
 
+    STATE = death(arrGhosts,player1,STATE)
+
     return STATE, block_pos, done, left, right, up, down
 
 
@@ -232,7 +238,6 @@ if __name__ == "__main__":
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             STATE, block_pos, done, left, right, up, down = keybind(STATE, block_pos, i, done, left, right, up, down)
-
         if up == True:
             if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
@@ -248,7 +253,6 @@ if __name__ == "__main__":
 
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
-
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
@@ -259,6 +263,19 @@ if __name__ == "__main__":
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
             np.save('main',mapp)
+        elif STATE == 'died':
+            arrGhosts = []
+            if randint(1,100) != 1:
+
+                f3 = pygame.font.SysFont('Pixar One', 48)
+                screen.fill(BG_COLOR)
+                text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
+                screen.blit(text3, (540, 500))
+                pygame.display.update()
+                pygame.time.wait(1000)
+                STATE = 'title'
+            else:
+                screen.blit(deathpage, (0,0))
         pygame.display.update()
 
     pygame.quit()
