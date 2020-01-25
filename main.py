@@ -3,6 +3,7 @@ import numpy as np
 import math
 import datetime
 from random import randint
+import 
 
 SIZE = (1048, 1024)
 BG_COLOR = (50, 50, 50)
@@ -23,6 +24,47 @@ class guard():
         self.y = y
         self.bulb = False
 
+    def update(self, screen):
+        screen.blit(image, (player1.x, player1.y))
+        if player1.bulb:
+            for i in range(100):
+                for j in range(i):
+                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j), (100, 0, 0))
+
+def add_ghosts():
+    if (randint(0, 100) == 1):
+        gx = player1.x
+        gy = player1.y
+        while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 200:
+            gx = randint(0, SIZE[0])
+            gy = randint(0, SIZE[1])
+
+        if (gx > player1.x):
+            arrGhosts.append(ghost(gx, gy, 'left'))
+        else:
+            arrGhosts.append(ghost(gx, gy, 'right'))
+
+def ghosts_update(screen):
+    for item in arrGhosts:
+        if (item.side == 'left'):
+            screen.blit(ghost_left, (item.x, item.y))
+        else:
+            screen.blit(ghost_right, (item.x, item.y))
+
+def title_screen(screen):
+    f2 = pygame.font.SysFont('Pixar One', 60)
+    text2 = f2.render("START", 0, (0, 180, 0))
+    screen.blit(text2, (395, 100))
+
+    f4 = pygame.font.SysFont('Pixar One', 48)
+    text4 = f4.render("NEW MAP", 0, (0, 180, 0))
+    screen.blit(text4, (375, 250))
+
+    f3 = pygame.font.SysFont('Pixar One', 48)
+    text3 = f3.render("EXIT", 0, (0, 180, 0))
+    screen.blit(text3, (420, 500))
+
+
 
 if __name__ == "__main__":
     pygame.init()
@@ -41,7 +83,6 @@ if __name__ == "__main__":
     player1 = guard(START_X, START_Y)
     fps = 240
     left, right, up, down = False, False, False, False
-    # arrGhosts = [ghost(100, 100) for i in range(1)]
     arrGhosts = []
 
 
@@ -51,9 +92,6 @@ if __name__ == "__main__":
         for i in pygame.event.get():  # events
             if i.type == pygame.QUIT:
                 done = True
-            elif i.type == pygame.MOUSEBUTTONDOWN:
-                if i.button == 1:
-                    print(pygame.mouse.get_pos()[0] // SIZE_BLOCK)
 
             elif i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_SPACE:
@@ -93,31 +131,14 @@ if __name__ == "__main__":
         if down == True:
             player1.y += SS
 
-        if (randint(0, 100) == 1):
-            gx = player1.x
-            gy = player1.y
-            while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 200:
-                gx = randint(0, SIZE[0])
-                gy = randint(0, SIZE[1])
 
-            if (gx > player1.x):
-                arrGhosts.append(ghost(gx, gy, 'left'))
-            else:
-                arrGhosts.append(ghost(gx, gy, 'right'))
-        
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
-        screen.blit(image, (player1.x, player1.y))
-        if player1.bulb:
-            for i in range(100):
-                for j in range(i):
-                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j), (100, 0, 0))
 
-        for item in arrGhosts:
-            if (item.side == 'left'):
-                screen.blit(ghost_left, (item.x, item.y))
-            else:
-                screen.blit(ghost_right, (item.x, item.y))
+        title_screen(screen)
+        # add_ghosts()
+        # player1.update(screen)
+        # ghosts_update(screen)
 
         pygame.display.update()
 

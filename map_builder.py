@@ -7,7 +7,7 @@ BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
 SIZE_BLOCK = 50
-N_BLOCKS = 1
+N_BLOCKS = 2
 
 X_line = 0
 Y_line = 0
@@ -32,7 +32,8 @@ if __name__ == "__main__":
     pygame.display.update()
     mapp = np.zeros((SIZE[0] // SIZE_BLOCK, SIZE[1] // SIZE_BLOCK))
 
-    floor = pygame.image.load(r'floor.png')
+    floor1 = pygame.image.load(r'floor.png')
+    floor2 = pygame.image.load(r'floor2.png')
 
     player1 = guard(START_X, START_Y)
     fps = 240
@@ -49,7 +50,10 @@ if __name__ == "__main__":
                 if i.button == 1:
                     bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
                     by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
-                    mapp[by, bx] += 1
+                    if mapp[by, bx] == N_BLOCKS:
+                        mapp[by, bx] = 0
+                    else:
+                        mapp[by, bx] += 1
 
 
             elif i.type == pygame.KEYDOWN:
@@ -96,7 +100,9 @@ if __name__ == "__main__":
         for y in range(SIZE[1] // SIZE_BLOCK):
             for x in range(SIZE[0] // SIZE_BLOCK):
                 if mapp[y, x] == 1:
-                    screen.blit(floor, (x * SIZE_BLOCK, y * SIZE_BLOCK))
+                    screen.blit(floor1, (x * SIZE_BLOCK, y * SIZE_BLOCK))
+                elif mapp[y, x] == 2:
+                    screen.blit(floor2, (x * SIZE_BLOCK, y * SIZE_BLOCK))
 
         pygame.display.update()
 
