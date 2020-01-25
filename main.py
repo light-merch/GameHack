@@ -10,7 +10,7 @@ START_X = 500
 START_Y = 400
 SS = 2  # Step Size
 SIZE_BLOCK = 50
-N_BLOCKS = 3
+N_BLOCKS = 18
 
 class ghost():
     def __init__(self, x, y, side):
@@ -42,12 +42,9 @@ def map_builder(screen, mapp, floors):
 
     for y in range(SIZE[1] // SIZE_BLOCK):
         for x in range(SIZE[0] // SIZE_BLOCK):
-            if mapp[y, x] == 1:
-                screen.blit(floors[0], (x * SIZE_BLOCK, y * SIZE_BLOCK))
-            elif mapp[y, x] == 2:
-                screen.blit(floors[1], (x * SIZE_BLOCK, y * SIZE_BLOCK))
-            elif mapp[y, x] == 3:
-                screen.blit(floors[2], (x * SIZE_BLOCK, y * SIZE_BLOCK))
+            for i in range(N_BLOCKS):
+                if mapp[y, x] == i + 1:
+                    screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
 
     return mapp
 
@@ -190,9 +187,14 @@ if __name__ == "__main__":
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
 
-    floor1 = pygame.image.load(r'floor.png')
-    floor2 = pygame.image.load(r'floor2.png')
-    floor3 = pygame.image.load(r'door.png')
+
+    fl = []
+    fl.append(pygame.image.load(r'floor.png'))
+    fl.append(pygame.image.load(r'floor2.png'))
+    fl.append(pygame.image.load(r'door.png'))
+
+    for i in range(15):
+        fl.append(pygame.image.load(f'block{i + 1}.png'))
 
     player1 = guard(START_X, START_Y)
     fps = 240
@@ -228,7 +230,7 @@ if __name__ == "__main__":
             player1.update(screen)
             ghosts_update(screen)
         elif STATE == 'create':
-            mapp = map_builder(screen, mapp, [floor1, floor2, floor3])
+            mapp = map_builder(screen, mapp, fl)
 
         pygame.display.update()
 
