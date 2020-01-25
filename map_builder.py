@@ -35,18 +35,19 @@ if __name__ == "__main__":
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
     image_left = pygame.image.load(r'guard3.png')
-    ghost = pygame.image.load(r'ghost.jpg')
+    ghost_right = pygame.image.load(r'ghost1.png')
+    ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
 
     for i in range(SIZE[0] // 10):
         pygame.draw.line(screen, (255, 255, 255), [X_line, 0], [X_line, SIZE[1]], 3)
         X_line += 50
-        pygame.display.update()
+    pygame.display.update()
 
     for i in range(SIZE[1] // 10):
         pygame.draw.line(screen, (255, 255, 255), [0, Y_line], [SIZE[0], Y_line], 3)
         Y_line += 50
-        pygame.display.update()
+    pygame.display.update()
 
     player1 = guard(START_X, START_Y)
     fps = 240
