@@ -26,7 +26,6 @@ class ghost():
         dx = player1.x - self.x
         dy = player1.y - self.y
         angle = math.atan2(dy, dx)
-        print(angle / 3.14 * 180)
 
         dx2 = math.cos(angle) * BSS
         dy2 = math.sin(angle) * BSS
