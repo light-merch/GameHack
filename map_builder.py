@@ -2,13 +2,13 @@ import pygame
 import numpy as np
 import math
 
-SIZE = (1024, 768)
+SIZE = (1048, 1000)
 BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
 SIZE_BLOCK = 50
-sc = pygame.display.set_mode((300,200))
-sc.fill((255, 255, 255))
+N_BLOCKS = 1
+
 X_line = 0
 Y_line = 0
 
@@ -30,17 +30,9 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(SIZE)
     screen.fill(BG_COLOR)
     pygame.display.update()
+    mapp = np.zeros((SIZE[0] // SIZE_BLOCK, SIZE[1] // SIZE_BLOCK))
 
     floor = pygame.image.load(r'floor.png')
-
-    for i in range(SIZE[0] // 10):
-        pygame.draw.line(screen, (255, 255, 255), [X_line, 0], [X_line, SIZE[1]], 3)
-        X_line += 50
-
-    for i in range(SIZE[1] // 10):
-        pygame.draw.line(screen, (255, 255, 255), [0, Y_line], [SIZE[0], Y_line], 3)
-        Y_line += 50
-    pygame.display.update()
 
     player1 = guard(START_X, START_Y)
     fps = 240
@@ -55,8 +47,9 @@ if __name__ == "__main__":
                 done = True
             elif i.type == pygame.MOUSEBUTTONDOWN:
                 if i.button == 1:
-                    bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK * SIZE_BLOCK
-                    by = pygame.mouse.get_pos()[0] // SIZE_BLOCK * SIZE_BLOCK
+                    bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
+                    by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+                    mapp[by, bx] += 1
 
 
             elif i.type == pygame.KEYDOWN:
@@ -93,15 +86,18 @@ if __name__ == "__main__":
 
         pygame.time.wait(1000 // fps)
 
-        for i in range(SIZE[0] // 10):
-            pygame.draw.line(screen, (255, 255, 255), [X_line, 0], [X_line, SIZE[1]], 3)
-            X_line += 50
 
-        for i in range(SIZE[1] // 10):
-            pygame.draw.line(screen, (255, 255, 255), [0, Y_line], [SIZE[0], Y_line], 3)
-            Y_line += 50
+        for i in range(SIZE[0] // SIZE_BLOCK):
+            pygame.draw.line(screen, (255, 255, 255), [i * SIZE_BLOCK, 0], [i * SIZE_BLOCK, SIZE[1]], 2)
 
-        #screen.blit(floor, (bx, by))
+        for i in range(SIZE[1] // SIZE_BLOCK):
+           pygame.draw.line(screen, (255, 255, 255), [0, i * SIZE_BLOCK], [SIZE[0], i * SIZE_BLOCK], 2)
+
+        for y in range(SIZE[1] // SIZE_BLOCK):
+            for x in range(SIZE[0] // SIZE_BLOCK):
+                if mapp[y, x] == 1:
+                    screen.blit(floor, (x * SIZE_BLOCK, y * SIZE_BLOCK))
+
         pygame.display.update()
 
     pygame.quit()
