@@ -24,5 +24,3 @@ def map_builder(screen, mapp, floors):
             for i in range(N_BLOCKS):
                 if mapp[y, x] == i + 1:
                     screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
-
-    return mapp, 'test'

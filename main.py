@@ -177,7 +177,7 @@ if __name__ == "__main__":
     screen.fill(BG_COLOR)
     pygame.display.update()
     try:
-        mapp = np.load('test.npy')
+        mapp = np.load('main.npy')
     except:
         mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
@@ -232,7 +232,7 @@ if __name__ == "__main__":
             player1.update(screen)
             ghosts_update(screen)
         elif STATE == 'create':
-            mapp, path = map_builder(screen, mapp, fl)
+            map_builder(screen, mapp, fl)
             np.save('main',mapp)
         pygame.display.update()
 
