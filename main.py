@@ -214,22 +214,22 @@ if __name__ == "__main__":
 
         if right == True:
             bx = (player1.x + SS + 50) // SIZE_BLOCK
-            by = player1.y // SIZE_BLOCK
+            by = (player1.y + 25) // SIZE_BLOCK
             if mapp[by, bx] in [1,3]:
                 player1.x += SS
         if up == True:
             bx = (player1.y - SS) // SIZE_BLOCK
-            by = player1.x // SIZE_BLOCK
+            by = (player1.x + 25) // SIZE_BLOCK
             if mapp[by, bx] in [1,3]:
                 player1.y -= SS
         if left == True:
             bx = (player1.x - SS) // SIZE_BLOCK
-            by = player1.y // SIZE_BLOCK
+            by = (player1.y + 25) // SIZE_BLOCK
             if mapp[by, bx] in [1,3]:
                 player1.x -= SS
         if down == True:
             bx = (player1.y + SS + 50) // SIZE_BLOCK
-            by = player1.x // SIZE_BLOCK
+            by = (player1.x + 25) // SIZE_BLOCK
             if mapp[by, bx] in [1,3]:
                 player1.y += SS
 
