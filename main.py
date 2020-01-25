@@ -2,6 +2,7 @@ import pygame
 import numpy as np
 import math
 import datetime
+from random import randint
 
 SIZE = (1024, 768)
 BG_COLOR = (50, 50, 50)
@@ -10,9 +11,10 @@ START_Y = 400
 SS = 2  # Step Size
 
 class ghost():
-    def __init__(self, x, y):
+    def __init__(self, x, y, side):
         self.x = x
         self.y = y
+        self.side = side
 
 
 class guard():
@@ -32,12 +34,15 @@ if __name__ == "__main__":
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
     image_left = pygame.image.load(r'guard3.png')
-    ghost = pygame.image.load(r'ghost2.png')
+    ghost_right = pygame.image.load(r'ghost2.png')
+    ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
 
     player1 = guard(START_X, START_Y)
     fps = 240
     left, right, up, down = False, False, False, False
+    # arrGhosts = [ghost(100, 100) for i in range(1)]
+    arrGhosts = []
 
 
     done = False
@@ -84,10 +89,24 @@ if __name__ == "__main__":
         if down == True:
             player1.y += SS
 
-        # print(datetime.datetime.time()[1])
+        if (randint(0, 100) == 1):
+            gx = player1.x
+            gy = player1.y
+            while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 100:
+                gx = randint(0, SIZE[0])
+                gy = randint(0, SIZE[1])
+
+            arrGhosts.append(ghost(gx, gy))
+        
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
         screen.blit(image, (player1.x, player1.y))
+        for item in arrGhosts:
+            if (elem.x > player1.x):
+                screen.blit(ghost_left, (item.x, item.y))
+            else:
+                screen.blit(ghost_right, (item.x, item.y))
+
         pygame.display.update()                                                                                                                                                                                                                                                                                                                                                                         
 
     pygame.quit()
