@@ -196,7 +196,8 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    # screen = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen.fill(BG_COLOR)
     pygame.display.update()
     try:
