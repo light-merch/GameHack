@@ -4,7 +4,7 @@ import math
 import datetime
 from random import randint
 
-SIZE = (1024, 768)
+SIZE = (1048, 1024)
 BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
@@ -37,18 +37,6 @@ if __name__ == "__main__":
     ghost_right = pygame.image.load(r'ghost1.png')
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
-
-    '''
-    for i in range(SIZE[0] // 10):
-        pygame.draw.line(screen, (255, 255, 255), [X_line, 0], [X_line, SIZE[1]], 3)
-        X_line += 50
-        pygame.display.update()
-
-    for i in range(SIZE[1] // 10):
-        pygame.draw.line(screen, (255, 255, 255), [0, Y_line], [SIZE[0], Y_line], 3)
-        Y_line += 50
-        pygame.display.update()
-    '''
 
     player1 = guard(START_X, START_Y)
     fps = 240
@@ -122,8 +110,8 @@ if __name__ == "__main__":
         screen.blit(image, (player1.x, player1.y))
         if player1.bulb:
             for i in range(100):
-                for j in range(i * 2):
-                    screen.set_at((player1.x - i, player1.y + j), (100, 0, 0))
+                for j in range(i):
+                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j), (100, 0, 0))
 
         for item in arrGhosts:
             if (item.side == 'left'):
