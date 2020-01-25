@@ -37,14 +37,20 @@ class guard():
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.rot = 0
         self.bulb = False
 
     def update(self, screen):
         screen.blit(image, (player1.x, player1.y))
         if player1.bulb:
-            for i in range(200):
-                for j in range(i):
-                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j + 50), (100, 0, 0, 0))
+            if self.rot == 1:
+                for i in range(200):
+                    for j in range(i):
+                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (100, 0, 0, 0))
+            elif self.rot == 3:
+                for i in range(200):
+                    for j in range(i):
+                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 0))
 
 
 def add_ghosts():
@@ -152,15 +158,19 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
         else:
             if i.key == pygame.K_w:
                 up = True
+                player1.rot = 0
                 image = image_back
             elif i.key == pygame.K_s:
                 down = True
+                player1.rot = 2
                 image = image_front
             elif i.key == pygame.K_a:
                 left = True
+                player1.rot = 3
                 image = image_left
             elif i.key == pygame.K_d:
                 right = True
+                player1.rot = 1
                 image = image_right
             
     elif i.type == pygame.KEYUP:
