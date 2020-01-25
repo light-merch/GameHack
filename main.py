@@ -41,10 +41,6 @@ class guard():
 
     def update(self, screen):
         screen.blit(image, (player1.x, player1.y))
-        pygame.draw.circle(screen, (100,150,100), (player1.x, player1.y),10)
-        pygame.draw.circle(screen, (100,0,0), (player1.x + 50, player1.y),10)
-        pygame.draw.circle(screen, (255,0,255), (player1.x, player1.y + 50),10)
-        pygame.draw.circle(screen, (100,150,0), (player1.x + 50, player1.y + 50),10)
         if player1.bulb:
             for i in range(200):
                 for j in range(i):
@@ -183,7 +179,7 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode(SIZE)
+    screen = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
     screen.fill(BG_COLOR)
     pygame.display.update()
     try:
@@ -209,7 +205,7 @@ if __name__ == "__main__":
         fl.append(pygame.image.load(f'block{i + 1}.png'))
 
     player1 = guard(START_X, START_Y)
-    fps = 480
+    fps = 1000
     block_pos = 0
     left, right, up, down = False, False, False, False
     cango = [1,2,3]
@@ -224,16 +220,16 @@ if __name__ == "__main__":
             STATE, block_pos, done, left, right, up, down = keybind(STATE, block_pos, i, done, left, right, up, down)
 
         if up == True:
-            if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 49) // SIZE_BLOCK] in cango:
+            if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
         if right == True: 
-            if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 50) // SIZE_BLOCK] in cango and mapp[(player1.y + 49) // SIZE_BLOCK, (player1.x + 50) // SIZE_BLOCK] in cango:
+            if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
                 player1.x += SS
         if down == True:
-            if mapp[(player1.y + 50) // SIZE_BLOCK, (player1.x + 49) // SIZE_BLOCK] in cango and mapp[(player1.y + 50) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
+            if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
                 player1.y += SS
         if left == True:
-            if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 49) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
+            if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
                 player1.x -= SS
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
