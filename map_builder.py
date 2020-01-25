@@ -25,4 +25,4 @@ def map_builder(screen, mapp, floors):
                 if mapp[y, x] == i + 1:
                     screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
 
-    return mapp
+    return mapp, 'test'

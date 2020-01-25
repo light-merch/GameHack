@@ -167,7 +167,10 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(SIZE)
     screen.fill(BG_COLOR)
     pygame.display.update()
-    mapp = np.zeros((SIZE[0] // SIZE_BLOCK, SIZE[1] // SIZE_BLOCK))
+    try:
+        mapp = np.load('test.npy')
+    except:
+        mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
@@ -187,7 +190,7 @@ if __name__ == "__main__":
         fl.append(pygame.image.load(f'block{i + 1}.png'))
 
     player1 = guard(START_X, START_Y)
-    fps = 240
+    fps = 480
     block_pos = 0
     left, right, up, down = False, False, False, False
     arrGhosts = []
@@ -220,8 +223,8 @@ if __name__ == "__main__":
             player1.update(screen)
             ghosts_update(screen)
         elif STATE == 'create':
-            mapp = map_builder(screen, mapp, fl)
-
+            mapp, path = map_builder(screen, mapp, fl)
+            np.save('main',mapp)
         pygame.display.update()
 
     pygame.quit()
