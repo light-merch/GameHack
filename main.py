@@ -14,6 +14,7 @@ SS = 2  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 22
+MM = 0
 
 class ghost():
     def __init__(self, x, y, side):
@@ -107,10 +108,10 @@ def picklives(px,py):
 def checkdamage(arrGhosts,player):
     for item in arrGhosts:
         if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
-            print(player.lives)
+            # print(player.lives)
             player.lives -= 1
 
-def keybind(STATE, block_pos, i, done, left, right, up, down):
+def keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM):
     global image
     if i.type == pygame.QUIT:
         done = True
@@ -184,6 +185,18 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
                 right = True
                 player1.rot = 1
                 image = image_right
+            elif i.key == pygame.K_g:
+                if MM != 0:
+                    MM -= 1
+                mapp = arrMap[MM]
+                print('hey')
+            elif i.key == pygame.K_j:
+                if MM == 5:
+                    MM = 0
+                else:
+                    MM += 1
+                mapp = arrMap[MM]
+                print('hey')
             
     elif i.type == pygame.KEYUP:
         if i.key == pygame.K_w:
@@ -195,12 +208,12 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
         elif i.key == pygame.K_d:
             right = False
 
-    return STATE, block_pos, done, left, right, up, down
+    return STATE, block_pos, done, left, right, up, down, mapp, MM
 
 def drawhearts(lives):
     for i in range(lives):
         screen.blit(heart,(10 + i * 60,10))
-        print(10 + i * 60,10)
+        # print(10 + i * 60,10)
 
 if __name__ == "__main__":
     pygame.init()
@@ -208,10 +221,23 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen.fill(BG_COLOR)
     pygame.display.update()
-    try:
-        mapp = np.load('main.npy')
-    except:
-        mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
+    
+    arrMap = np.load('neww.npy')
+    #arrMap = []
+    #mapp = mar[1]
+    #arrMap.append(mapp)
+    #arrMap.append(mapp)
+    #arrMap.append(mapp)
+    #arrMap.append(mapp)
+    #arrMap.append(mapp)
+    #arrMap.append(mapp)
+    mapp = arrMap[0]
+
+    #print(arrMap)
+    #print(arrMap[0])
+    #np.save('neww', arrMap)
+
+    #mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
@@ -250,7 +276,7 @@ if __name__ == "__main__":
     while not done:
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
-            STATE, block_pos, done, left, right, up, down = keybind(STATE, block_pos, i, done, left, right, up, down)
+            STATE, block_pos, done, left, right, up, down, mapp, MM = keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM)
         if up == True:
             if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
@@ -271,7 +297,7 @@ if __name__ == "__main__":
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
-            checkdamage(arrGhosts,player1)
+            checkdamage(arrGhosts, player1)
             if player1.lives < 1:
                 STATE = 'died'
             if player1.lives < 4:
@@ -283,7 +309,7 @@ if __name__ == "__main__":
             drawhearts(player1.lives)
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
-            np.save('main',mapp)
+            np.save('neww', arrMap)
         elif STATE == 'died':
             arrGhosts = []
             player1.lives = 3
@@ -291,6 +317,7 @@ if __name__ == "__main__":
                 mapp = np.load('main.npy')
             except:
                 mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
+
             if randint(1,100) != 1:
                 f3 = pygame.font.SysFont('Pixar One', 48)
                 screen.fill(BG_COLOR)
@@ -301,6 +328,7 @@ if __name__ == "__main__":
                 STATE = 'title'
             else:
                 screen.blit(deathpage, (0,0))
+
         pygame.display.update()
 
     pygame.quit()
