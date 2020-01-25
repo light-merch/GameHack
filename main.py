@@ -107,7 +107,7 @@ if __name__ == "__main__":
         if player1.bulb:
             for i in range(100):
                 for j in range(i * 2):
-                    screen.set_at((player1.x + i, player1.y), (100, 0, 0))
+                    screen.set_at((player1.x - i, player1.y + j), (100, 0, 0))
 
         for item in arrGhosts:
             if (item.side == 'left'):
