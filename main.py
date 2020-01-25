@@ -39,6 +39,7 @@ class guard():
         self.y = y
         self.rot = 0
         self.bulb = False
+        self.lives = 3
 
     def update(self, screen):
         screen.blit(image, (player1.x, player1.y))
@@ -96,11 +97,18 @@ def title_screen(screen):
     text3 = f3.render("EXIT", 0, (0, 180, 0))
     screen.blit(text3, (540, 500))
 
-def death(arrGhosts,player, state):
+def picklives(px,py):
+    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 20:
+        mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 1
+        return 1
+    else:
+        return 0
+
+def checkdamage(arrGhosts,player):
     for item in arrGhosts:
         if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
-            return 'died'
-    return state
+            print(player.lives)
+            player.lives -= 1
 
 def keybind(STATE, block_pos, i, done, left, right, up, down):
     global image
@@ -187,11 +195,12 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
         elif i.key == pygame.K_d:
             right = False
 
-    STATE = death(arrGhosts,player1,STATE)
-
     return STATE, block_pos, done, left, right, up, down
 
-
+def drawhearts(lives):
+    for i in range(lives):
+        screen.blit(heart,(10 + i * 60,10))
+        print(10 + i * 60,10)
 
 if __name__ == "__main__":
     pygame.init()
@@ -226,13 +235,15 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'battery.png'))
     fl.append(pygame.image.load(r'battery2.png'))
 
+    heart = pygame.image.load(r'heart.jpg')
+
     player1 = guard(START_X, START_Y)
     fps = 1000
     block_pos = 0
     left, right, up, down = False, False, False, False
-    cango = [1,2,3]
+    powerups = [20,21,22]
+    cango = [1,2,3] + powerups
     arrGhosts = []
-
 
     done = False
     STATE = 'title'
@@ -253,22 +264,34 @@ if __name__ == "__main__":
             if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
                 player1.x -= SS
 
+        
+        
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
+            checkdamage(arrGhosts,player1)
+            if player1.lives < 1:
+                STATE = 'died'
+            if player1.lives < 4:
+                player1.lives += picklives(player1.x,player1.y)
             map_builder(screen, mapp, fl)
             add_ghosts()
             ghosts_update(screen)
             player1.update(screen)
+            drawhearts(player1.lives)
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
             np.save('main',mapp)
         elif STATE == 'died':
             arrGhosts = []
+            player1.lives = 3
+            try:
+                mapp = np.load('main.npy')
+            except:
+                mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
             if randint(1,100) != 1:
-
                 f3 = pygame.font.SysFont('Pixar One', 48)
                 screen.fill(BG_COLOR)
                 text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
