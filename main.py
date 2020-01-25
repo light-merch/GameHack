@@ -115,6 +115,12 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
                 mapp[by, bx] -= 1
     
     elif i.type == pygame.KEYDOWN:
+        if i.key == pygame.K_ESCAPE:
+            if STATE == 'title':
+                done = True
+            else:
+                STATE = 'title'
+
         if i.key == pygame.K_SPACE:
             if STATE == 'title':
                 if block_pos == 0:
@@ -217,6 +223,7 @@ if __name__ == "__main__":
             by = player1.y // SIZE_BLOCK
             if mapp[by, bx] in [1,3]:
                 player1.x += SS
+
         if up == True:
             player1.y -= SS
         if left == True:
