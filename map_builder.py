@@ -10,7 +10,7 @@ START_X = 500
 START_Y = 400
 SS = 2  # Step Size
 SIZE_BLOCK = 50
-N_BLOCKS = 18
+N_BLOCKS = 22
 
 def map_builder(screen, mapp, floors):
     for i in range(SIZE[0] // SIZE_BLOCK):
