@@ -99,7 +99,7 @@ def title_screen(screen):
 
 def death(arrGhosts,player, state):
     for item in arrGhosts:
-        if abs(player.x - item.x) < 20 or abs(player.y - item.y) < 20:
+        if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
             return 'died'
     return state
 
@@ -265,7 +265,9 @@ if __name__ == "__main__":
             map_builder(screen, mapp, fl)
             np.save('main',mapp)
         elif STATE == 'died':
+            arrGhosts = []
             if randint(1,100) != 1:
+
                 f3 = pygame.font.SysFont('Pixar One', 48)
                 screen.fill(BG_COLOR)
                 text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
