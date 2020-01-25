@@ -21,16 +21,16 @@ class ghost():
         self.y = y
         self.side = side
 
-    '''def update(self):
+    def update(self):
         c = 0
         dx = abs(player1.x - self.x)
         dy = abs(player1.y - self.y)
-        с = math.sqrt(dx * dx - dy * dy)
-        k = c / BSS
-        new_dx = dx // k
-        new_dy = dy // k
-        self.x += new_dx
-        self.y += new_dy'''
+        # с = math.sqrt(dx * dx - dy * dy)
+        # k = c / BSS
+        # new_dx = dx // k
+        # new_dy = dy // k
+        self.x += 10 # new_dx
+        self.y += 10 # new_dy
 
 
 class guard():
@@ -42,13 +42,13 @@ class guard():
     def update(self, screen):
         screen.blit(image, (player1.x, player1.y))
         if player1.bulb:
-            for i in range(300):
+            for i in range(200):
                 for j in range(i):
-                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j + 50), (100, 0, 0))
+                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j + 50), (100, 0, 0, 0))
 
 
 def add_ghosts():
-    if (randint(0, 100) == 1):
+    if (randint(0, 10) == 1):
         gx = player1.x
         gy = player1.y
         while math.sqrt((gx - player1.x) * (gx - player1.x) + (gy - player1.y) * (gy - player1.y)) < 200:
@@ -63,7 +63,7 @@ def add_ghosts():
 
 def ghosts_update(screen):
     for item in arrGhosts:
-        # item.update()
+        item.update()
         if (item.side == 'left'):
             screen.blit(ghost_left, (item.x, item.y))
         else:
@@ -230,8 +230,8 @@ if __name__ == "__main__":
         elif STATE == 'game':
             map_builder(screen, mapp, fl)
             add_ghosts()
-            player1.update(screen)
             ghosts_update(screen)
+            player1.update(screen)
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
             np.save('main',mapp)
