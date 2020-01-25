@@ -61,7 +61,7 @@ if __name__ == "__main__":
             elif i.type == pygame.MOUSEBUTTONDOWN:
                 if i.button == 1:
                     print(pygame.mouse.get_pos()[0] // SIZE_BLOCK)
-
+                    
             elif i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_w:
                     up = True
