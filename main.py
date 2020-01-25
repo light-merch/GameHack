@@ -225,11 +225,20 @@ if __name__ == "__main__":
                 player1.x += SS
 
         if up == True:
-            player1.y -= SS
+            bx = (player1.y - SS) // SIZE_BLOCK
+            by = player1.x // SIZE_BLOCK
+            if mapp[by, bx] in [1,3]:
+                player1.y -= SS
         if left == True:
-            player1.x -= SS
+            bx = (player1.x - SS) // SIZE_BLOCK
+            by = player1.y // SIZE_BLOCK
+            if mapp[by, bx] in [1,3]:
+                player1.x -= SS
         if down == True:
-            player1.y += SS
+            bx = (player1.y + SS + 50) // SIZE_BLOCK
+            by = player1.x // SIZE_BLOCK
+            if mapp[by, bx] in [1,3]:
+                player1.y += SS
 
 
         pygame.time.wait(1000 // fps)
