@@ -97,7 +97,7 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
     if i.type == pygame.QUIT:
         done = True
 
-    elif i.type == pygame.MOUSEBUTTONDOWN:
+    elif i.type == pygame.MOUSEBUTTONDOWN and STATE == 'create':
         if i.button == 1:
             bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
             by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
