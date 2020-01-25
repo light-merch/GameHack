@@ -99,7 +99,7 @@ def title_screen(screen):
 
 def death(arrGhosts,player, state):
     for item in arrGhosts:
-        if abs(player.x - item.x) < 25 or abs(player.y - item.y) < 25:
+        if abs(player.x - item.x) < 20 or abs(player.y - item.y) < 20:
             return 'died'
     return state
 
@@ -254,7 +254,6 @@ if __name__ == "__main__":
 
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
-        print(STATE)
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
@@ -271,6 +270,9 @@ if __name__ == "__main__":
                 screen.fill(BG_COLOR)
                 text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
                 screen.blit(text3, (540, 500))
+                pygame.display.update()
+                pygame.time.wait(1000)
+                STATE = 'title'
             else:
                 screen.blit(deathpage, (0,0))
         pygame.display.update()
