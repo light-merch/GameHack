@@ -78,23 +78,23 @@ def ghosts_update(screen):
 
 def title_screen(screen):
     if block_pos == 0:
-        pygame.draw.rect(screen, (255, 255, 255), (200, 100, 500, 100))
+        pygame.draw.rect(screen, (255, 255, 255), (400, 100, 410, 100))
     elif block_pos == 1:
-        pygame.draw.rect(screen, (255, 255, 255), (200, 200, 500, 100))
+        pygame.draw.rect(screen, (255, 255, 255), (400, 210, 415, 150))
     elif block_pos == 2:
-        pygame.draw.rect(screen, (255, 255, 255), (200, 450, 500, 110))
+        pygame.draw.rect(screen, (255, 255, 255), (400, 470, 410, 110))
 
     f2 = pygame.font.SysFont('Pixar One', 60)
     text2 = f2.render("START", 0, (0, 180, 0))
-    screen.blit(text2, (395, 100))
+    screen.blit(text2, (515, 100))
 
     f4 = pygame.font.SysFont('Pixar One', 48)
     text4 = f4.render("NEW MAP", 0, (0, 180, 0))
-    screen.blit(text4, (375, 250))
+    screen.blit(text4, (495, 250))
 
     f3 = pygame.font.SysFont('Pixar One', 48)
     text3 = f3.render("EXIT", 0, (0, 180, 0))
-    screen.blit(text3, (420, 500))
+    screen.blit(text3, (540, 500))
 
 
 
@@ -189,7 +189,7 @@ def keybind(STATE, block_pos, i, done, left, right, up, down):
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode(SIZE)
+    screen = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
     screen.fill(BG_COLOR)
     pygame.display.update()
     try:
@@ -215,9 +215,10 @@ if __name__ == "__main__":
         fl.append(pygame.image.load(f'block{i + 1}.png'))
 
     player1 = guard(START_X, START_Y)
-    fps = 480
+    fps = 1000
     block_pos = 0
     left, right, up, down = False, False, False, False
+    cango = [1,2,3]
     arrGhosts = []
 
 
@@ -228,29 +229,18 @@ if __name__ == "__main__":
         for i in pygame.event.get():  # events
             STATE, block_pos, done, left, right, up, down = keybind(STATE, block_pos, i, done, left, right, up, down)
 
-        if right == True:
-            bx = (player1.x + SS + 50) // SIZE_BLOCK
-            by = player1.y // SIZE_BLOCK
-            if mapp[by, bx] in [1,3]:
-                player1.x += SS
-
         if up == True:
-            bx = (player1.y - SS) // SIZE_BLOCK
-            by = player1.x // SIZE_BLOCK
-            if mapp[by, bx] in [1,3]:
+            if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
-        if left == True:
-            bx = (player1.x - SS) // SIZE_BLOCK
-            by = player1.y // SIZE_BLOCK
-            if mapp[by, bx] in [1,3]:
-                player1.x -= SS
+        if right == True: 
+            if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
+                player1.x += SS
         if down == True:
-            bx = (player1.y + SS + 50) // SIZE_BLOCK
-            by = player1.x // SIZE_BLOCK
-            if mapp[by, bx] in [1,3]:
+            if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
                 player1.y += SS
-
-
+        if left == True:
+            if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
+                player1.x -= SS
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
 
