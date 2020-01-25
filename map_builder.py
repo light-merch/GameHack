@@ -31,18 +31,11 @@ if __name__ == "__main__":
     screen.fill(BG_COLOR)
     pygame.display.update()
 
-    image_back = pygame.image.load(r'guard0.png')
-    image_right = pygame.image.load(r'guard1.png')
-    image_front = pygame.image.load(r'guard2.png')
-    image_left = pygame.image.load(r'guard3.png')
-    ghost_right = pygame.image.load(r'ghost1.png')
-    ghost_left = pygame.image.load(r'ghost2.png')
-    image = image_front
+    floor = pygame.image.load(r'floor.png')
 
     for i in range(SIZE[0] // 10):
         pygame.draw.line(screen, (255, 255, 255), [X_line, 0], [X_line, SIZE[1]], 3)
         X_line += 50
-    pygame.display.update()
 
     for i in range(SIZE[1] // 10):
         pygame.draw.line(screen, (255, 255, 255), [0, Y_line], [SIZE[0], Y_line], 3)
@@ -53,6 +46,7 @@ if __name__ == "__main__":
     fps = 240
     left, right, up, down = False, False, False, False
 
+    bx, by = 0, 0
     done = False
     while not done:
         screen.fill(BG_COLOR)
@@ -61,8 +55,10 @@ if __name__ == "__main__":
                 done = True
             elif i.type == pygame.MOUSEBUTTONDOWN:
                 if i.button == 1:
-                    print(pygame.mouse.get_pos()[0] // SIZE_BLOCK)
-                    
+                    bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK * SIZE_BLOCK
+                    by = pygame.mouse.get_pos()[0] // SIZE_BLOCK * SIZE_BLOCK
+
+
             elif i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_w:
                     up = True
@@ -96,9 +92,16 @@ if __name__ == "__main__":
             player1.y += 1
 
         pygame.time.wait(1000 // fps)
-        f2 = pygame.font.SysFont('Pixar One', 60)
-        f2 = pygame.font.SysFont('Pixar One', 60)
-    #    screen.blit(image, (player1.x, player1.y))
-        # pygame.display.update()
+
+        for i in range(SIZE[0] // 10):
+            pygame.draw.line(screen, (255, 255, 255), [X_line, 0], [X_line, SIZE[1]], 3)
+            X_line += 50
+
+        for i in range(SIZE[1] // 10):
+            pygame.draw.line(screen, (255, 255, 255), [0, Y_line], [SIZE[0], Y_line], 3)
+            Y_line += 50
+
+        #screen.blit(floor, (bx, by))
+        pygame.display.update()
 
     pygame.quit()
