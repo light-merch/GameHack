@@ -13,7 +13,7 @@ START_Y = 400
 SS = 2  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
-N_BLOCKS = 21
+N_BLOCKS = 22
 
 class ghost():
     def __init__(self, x, y, side):
@@ -223,6 +223,7 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'gun.png'))
     fl.append(pygame.image.load(r'hp.png'))
     fl.append(pygame.image.load(r'battery.png'))
+    fl.append(pygame.image.load(r'battery2.png'))
 
     player1 = guard(START_X, START_Y)
     fps = 1000
