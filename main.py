@@ -213,7 +213,10 @@ if __name__ == "__main__":
             STATE, block_pos, done, left, right, up, down = keybind(STATE, block_pos, i, done, left, right, up, down)
 
         if right == True:
-            player1.x += SS
+            bx = (player1.x + SS + 50) // SIZE_BLOCK
+            by = player1.y // SIZE_BLOCK
+            if mapp[by, bx] in [1,3]:
+                player1.x += SS
         if up == True:
             player1.y -= SS
         if left == True:
