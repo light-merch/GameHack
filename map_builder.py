@@ -7,7 +7,7 @@ BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
 SIZE_BLOCK = 50
-N_BLOCKS = 2
+N_BLOCKS = 3
 
 X_line = 0
 Y_line = 0
@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     floor1 = pygame.image.load(r'floor.png')
     floor2 = pygame.image.load(r'floor2.png')
+    floor3 = pygame.image.load(r'door.png')
 
     player1 = guard(START_X, START_Y)
     fps = 240
@@ -103,6 +104,8 @@ if __name__ == "__main__":
                     screen.blit(floor1, (x * SIZE_BLOCK, y * SIZE_BLOCK))
                 elif mapp[y, x] == 2:
                     screen.blit(floor2, (x * SIZE_BLOCK, y * SIZE_BLOCK))
+                elif mapp[y, x] == 3:
+                    screen.blit(floor3, (x * SIZE_BLOCK, y * SIZE_BLOCK))
 
         pygame.display.update()
 

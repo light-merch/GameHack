@@ -3,13 +3,14 @@ import numpy as np
 import math
 import datetime
 from random import randint
-import 
 
 SIZE = (1048, 1024)
 BG_COLOR = (50, 50, 50)
 START_X = 500
 START_Y = 400
 SS = 2  # Step Size
+SIZE_BLOCK = 50
+N_BLOCKS = 3
 
 class ghost():
     def __init__(self, x, y, side):
@@ -29,7 +30,27 @@ class guard():
         if player1.bulb:
             for i in range(100):
                 for j in range(i):
-                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j), (100, 0, 0))
+                    screen.set_at((player1.x - i, player1.y - int(i / 2) + j + 50), (100, 0, 0))
+
+
+def map_builder(screen, mapp, floors):
+    for i in range(SIZE[0] // SIZE_BLOCK):
+        pygame.draw.line(screen, (255, 255, 255), [i * SIZE_BLOCK, 0], [i * SIZE_BLOCK, SIZE[1]], 2)
+
+    for i in range(SIZE[1] // SIZE_BLOCK):
+        pygame.draw.line(screen, (255, 255, 255), [0, i * SIZE_BLOCK], [SIZE[0], i * SIZE_BLOCK], 2)
+
+    for y in range(SIZE[1] // SIZE_BLOCK):
+        for x in range(SIZE[0] // SIZE_BLOCK):
+            if mapp[y, x] == 1:
+                screen.blit(floors[0], (x * SIZE_BLOCK, y * SIZE_BLOCK))
+            elif mapp[y, x] == 2:
+                screen.blit(floors[1], (x * SIZE_BLOCK, y * SIZE_BLOCK))
+            elif mapp[y, x] == 3:
+                screen.blit(floors[2], (x * SIZE_BLOCK, y * SIZE_BLOCK))
+
+    return mapp
+
 
 def add_ghosts():
     if (randint(0, 100) == 1):
@@ -44,6 +65,7 @@ def add_ghosts():
         else:
             arrGhosts.append(ghost(gx, gy, 'right'))
 
+
 def ghosts_update(screen):
     for item in arrGhosts:
         if (item.side == 'left'):
@@ -51,7 +73,15 @@ def ghosts_update(screen):
         else:
             screen.blit(ghost_right, (item.x, item.y))
 
+
 def title_screen(screen):
+    if block_pos == 0:
+        pygame.draw.rect(screen, (255, 255, 255), (200, 100, 500, 100))
+    elif block_pos == 1:
+        pygame.draw.rect(screen, (255, 255, 255), (200, 200, 500, 100))
+    elif block_pos == 2:
+        pygame.draw.rect(screen, (255, 255, 255), (200, 450, 500, 110))
+
     f2 = pygame.font.SysFont('Pixar One', 60)
     text2 = f2.render("START", 0, (0, 180, 0))
     screen.blit(text2, (395, 100))
@@ -66,11 +96,91 @@ def title_screen(screen):
 
 
 
+def keybind(STATE, block_pos, i, done, left, right, up, down):
+    global image
+    if i.type == pygame.QUIT:
+        done = True
+
+    elif i.type == pygame.MOUSEBUTTONDOWN:
+        if i.button == 1:
+            bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
+            by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+            if mapp[by, bx] == N_BLOCKS:
+                mapp[by, bx] = 0
+            else:
+                mapp[by, bx] += 1
+
+        elif i.button == 3:
+            bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
+            by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+            if mapp[by, bx] == 0:
+                mapp[by, bx] = N_BLOCKS
+            else:
+                mapp[by, bx] -= 1
+    
+    elif i.type == pygame.KEYDOWN:
+        if i.key == pygame.K_SPACE:
+            if STATE == 'title':
+                if block_pos == 0:
+                    STATE = 'game'
+
+                elif block_pos == 1:
+                    STATE = 'create'
+
+                elif block_pos == 2:
+                    done = True
+            else:
+                if player1.bulb:
+                    player1.bulb = False
+                else:
+                    player1.bulb = True
+
+        if STATE == 'title':
+            if i.key == pygame.K_w:
+                if block_pos == 0:
+                    block_pos = 2
+                else:
+                    block_pos -= 1
+            elif i.key == pygame.K_s:
+                if block_pos == 2:
+                    block_pos = 0
+                else:
+                    block_pos += 1
+
+        else:
+            if i.key == pygame.K_w:
+                up = True
+                image = image_back
+            elif i.key == pygame.K_s:
+                down = True
+                image = image_front
+            elif i.key == pygame.K_a:
+                left = True
+                image = image_left
+            elif i.key == pygame.K_d:
+                right = True
+                image = image_right
+            
+    elif i.type == pygame.KEYUP:
+        if i.key == pygame.K_w:
+            up = False
+        elif i.key == pygame.K_s:
+            down = False
+        elif i.key == pygame.K_a:
+            left = False
+        elif i.key == pygame.K_d:
+            right = False
+
+    return STATE, block_pos, done, left, right, up, down
+
+
+
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(SIZE)
     screen.fill(BG_COLOR)
     pygame.display.update()
+    mapp = np.zeros((SIZE[0] // SIZE_BLOCK, SIZE[1] // SIZE_BLOCK))
 
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
@@ -80,47 +190,23 @@ if __name__ == "__main__":
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
 
+    floor1 = pygame.image.load(r'floor.png')
+    floor2 = pygame.image.load(r'floor2.png')
+    floor3 = pygame.image.load(r'door.png')
+
     player1 = guard(START_X, START_Y)
     fps = 240
+    block_pos = 0
     left, right, up, down = False, False, False, False
     arrGhosts = []
 
 
     done = False
+    STATE = 'title'
     while not done:
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
-            if i.type == pygame.QUIT:
-                done = True
-
-            elif i.type == pygame.KEYDOWN:
-                if i.key == pygame.K_SPACE:
-                    if player1.bulb:
-                        player1.bulb = False
-                    else:
-                        player1.bulb = True
-
-                if i.key == pygame.K_w:
-                    up = True
-                    image = image_back
-                elif i.key == pygame.K_s:
-                    down = True
-                    image = image_front
-                elif i.key == pygame.K_a:
-                    left = True
-                    image = image_left
-                elif i.key == pygame.K_d:
-                    right = True
-                    image = image_right
-            elif i.type == pygame.KEYUP:
-                if i.key == pygame.K_w:
-                    up = False
-                elif i.key == pygame.K_s:
-                    down = False
-                elif i.key == pygame.K_a:
-                    left = False
-                elif i.key == pygame.K_d:
-                    right = False
+            STATE, block_pos, done, left, right, up, down = keybind(STATE, block_pos, i, done, left, right, up, down)
 
         if right == True:
             player1.x += SS
@@ -135,10 +221,14 @@ if __name__ == "__main__":
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
 
-        title_screen(screen)
-        # add_ghosts()
-        # player1.update(screen)
-        # ghosts_update(screen)
+        if STATE == 'title':
+            title_screen(screen)
+        elif STATE == 'game':
+            add_ghosts()
+            player1.update(screen)
+            ghosts_update(screen)
+        elif STATE == 'create':
+            mapp = map_builder(screen, mapp, [floor1, floor2, floor3])
 
         pygame.display.update()
 
