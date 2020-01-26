@@ -3,6 +3,7 @@ import numpy as np
 import math
 import datetime
 from random import randint
+import time
 
 from map_builder import map_builder
 
@@ -15,6 +16,9 @@ BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 22
 MM = 0
+
+
+# class_bullet
 
 class ghost():
     def __init__(self, x, y, side):
@@ -32,7 +36,7 @@ class ghost():
         dy2 = math.sin(angle) * BSS
         self.x += dx2 # new_dx
         self.y += dy2 # new_dy
-
+    
 
 class guard():
     def __init__(self, x, y):
@@ -41,18 +45,19 @@ class guard():
         self.rot = 0
         self.bulb = False
         self.lives = 3
+        self.shots = 0
+
 
     def update(self, screen):
-        screen.blit(image, (player1.x, player1.y))
         if player1.bulb:
             if self.rot == 1:
                 for i in range(200):
                     for j in range(i):
-                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (100, 0, 0, 250))
+                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (100, 0, 0, 255 - i))
             elif self.rot == 3:
                 for i in range(200):
                     for j in range(i):
-                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 20))
+                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 255 - i))
                         # screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 0))
 
 
@@ -99,21 +104,25 @@ def title_screen(screen):
     text3 = f3.render("EXIT", 0, (0, 180, 0))
     screen.blit(text3, (540, 500))
 
-def picklives(px,py):
-    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 20:
+def pick(N):
+    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
         mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 1
         return 1
     else:
         return 0
 
-def checkdamage(arrGhosts,player):
+def checkdamage(arrGhosts, player, cool_down):
     for item in arrGhosts:
         if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
             # print(player.lives)
-            player.lives -= 1
+            if time.clock() - cool_down >= 2:
+                player.lives -= 1
+                cool_down = time.clock()
 
-def keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM):
-    global image
+    return cool_down
+
+def keybind():
+    global image, STATE, block_pos, i, done, left, right, up, down, mapp, MM, screen, TIME_TO_UPDATE
     if i.type == pygame.QUIT:
         done = True
 
@@ -151,10 +160,16 @@ def keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM):
 
                 elif block_pos == 2:
                     done = True
+            elif STATE == 'create':
+                bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
+                by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+                mapp[by, bx] = 0
+
             else:
                 if player1.bulb:
                     player1.bulb = False
                 else:
+                    TIME_TO_UPDATE = True
                     player1.bulb = True
 
         if STATE == 'title':
@@ -186,18 +201,16 @@ def keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM):
                 right = True
                 player1.rot = 1
                 image = image_right
-            elif i.key == pygame.K_g:
+            elif i.key == pygame.K_h:
                 if MM != 0:
                     MM -= 1
                 mapp = arrMap[MM]
-                print('hey')
             elif i.key == pygame.K_j:
                 if MM == 5:
                     MM = 0
                 else:
                     MM += 1
                 mapp = arrMap[MM]
-                print('hey')
             
     elif i.type == pygame.KEYUP:
         if i.key == pygame.K_w:
@@ -209,7 +222,6 @@ def keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM):
         elif i.key == pygame.K_d:
             right = False
 
-    return STATE, block_pos, done, left, right, up, down, mapp, MM
 
 def drawhearts(lives):
     for i in range(lives):
@@ -221,32 +233,14 @@ if __name__ == "__main__":
     screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
     # screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
-
+    
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
 
-    #pygame.draw.rect(screen,)
-    #screen.fill((0,0,0))
-    #screen_.blit(screen,SIZE)
-    #pygame.display.flip()
-    #pygame.display.update()
-    #import time
-    #time.sleep()
-    arrMap = np.load('neww.npy')
-    #arrMap = []
-    #mapp = mar[1]
-    #arrMap.append(mapp)
-    #arrMap.append(mapp)
-    #arrMap.append(mapp)
-    #arrMap.append(mapp)
-    #arrMap.append(mapp)
-    #arrMap.append(mapp)
-    mapp = arrMap[0]
-
-    #print(arrMap)
-    #print(arrMap[0])
-    #np.save('neww', arrMap)
-
-    #mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
+    try:
+        arrMap = np.load('neww.npy')
+        mapp = arrMap[0]
+    except:
+        mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
@@ -255,6 +249,7 @@ if __name__ == "__main__":
     ghost_right = pygame.image.load(r'ghost1.png')
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
+    cool_down = time.clock()
 
 
     fl = []
@@ -285,18 +280,29 @@ if __name__ == "__main__":
     while not done:
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
-            STATE, block_pos, done, left, right, up, down, mapp, MM = keybind(STATE, block_pos, i, done, left, right, up, down, mapp, MM)
+            keybind()
+
         if up == True:
             if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
         if right == True: 
             if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
+                if player1.x > SIZE[0] - 100 and MM != 5:
+                    MM += 1
+                    mapp = arrMap[MM]
+                    player1.x = 10
+
                 player1.x += SS
         if down == True:
             if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
                 player1.y += SS
         if left == True:
             if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
+                if player1.x < 20 and MM != 0:
+                    MM -= 1
+                    mapp = arrMap[MM]
+                    player1.x = SIZE[0] - 10
+
                 player1.x -= SS
 
         
@@ -306,15 +312,21 @@ if __name__ == "__main__":
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
-            checkdamage(arrGhosts, player1)
+            cool_down = checkdamage(arrGhosts, player1, cool_down)
             if player1.lives < 1:
                 STATE = 'died'
             if player1.lives < 4:
-                player1.lives += picklives(player1.x,player1.y)
+                player1.lives += pick(20)
+
+            if player1.shots < 20:
+                player1.shots += 4 * pick(21) + 4 * pick(22)
+
             map_builder(screen, mapp, fl)
             add_ghosts()
             ghosts_update(screen)
             player1.update(screen)
+
+            screen.blit(image, (player1.x, player1.y))
             # screen_.blit(screen, SIZE)
             # pygame.display.flip()
             drawhearts(player1.lives)
@@ -329,7 +341,7 @@ if __name__ == "__main__":
             except:
                 mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
-            if randint(1,100) != 1:
+            if randint(1, 100) != 1:
                 f3 = pygame.font.SysFont('Pixar One', 48)
                 screen.fill(BG_COLOR)
                 text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
@@ -340,8 +352,9 @@ if __name__ == "__main__":
             else:
                 screen.blit(deathpage, (0, 0))
 
-        screen_.blit(screen, (0,0))
+        # screen.fill(BG_COLOR)
+        screen_.blit(screen, (0, 0))
         pygame.display.flip()
-        pygame.display.update()
+        # pygame.display.update()
 
     pygame.quit()
