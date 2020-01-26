@@ -65,14 +65,36 @@ class guard():
         pygame.draw.circle(screen, (0,0,0), (player1.x + 40, player1.y + 40),10)
         if player1.bulb:
             if self.rot == 1:
-                for i in range(200):
-                    for j in range(i):
-                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (100, 0, 0, 255 - i))
+                for i in range(250):
+                    for j in range(i // 2):
+                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+
+                    for j in range(i // 2):
+                        screen.set_at((player1.x + 50 + i, player1.y - j + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+
             elif self.rot == 3:
-                for i in range(200):
-                    for j in range(i):
-                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 255 - i))
-                        # screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (100, 0, 0, 0))
+                for i in range(250):
+                    for j in range(i // 2):
+                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
+
+                    for j in range(i // 2):
+                        screen.set_at((player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i *  j) / 255))
+
+            if self.rot == 0:
+                for i in range(250):
+                    for j in range(i // 2):
+                        screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+
+                    for j in range(i // 2):
+                        screen.set_at((player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+
+            elif self.rot == 2:
+                for i in range(250):
+                    for j in range(i // 2):
+                        screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+
+                    for j in range(i // 2):
+                        screen.set_at((player1.x - j + 23, player1.y + i + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
 
 
 def add_ghosts():
@@ -337,6 +359,7 @@ if __name__ == "__main__":
         
         
         pygame.time.wait(1000 // fps)
+        screen.fill(BG_COLOR)
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
@@ -345,16 +368,21 @@ if __name__ == "__main__":
                 STATE = 'died'
             if player1.lives < 4:
                 player1.lives += pick(21)
+            if player1.lives < 4:
+                player1.lives += pick(22)
 
             if player1.shots < 20:
                 player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
                 player1.energy += 10 * pick(22) + 10 * pick(23)
-
+            
+            screen_.fill
+            map_builder(screen_, mapp, fl)
             map_builder(screen, mapp, fl)
             add_ghosts()
             ghosts_update(screen)
+            ghosts_update(screen_)
 
             player1.update(screen)
             #TIME_TO_UPDATE = False
