@@ -346,6 +346,7 @@ if __name__ == "__main__":
     except:
         mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
+    '''
     screen0 = pygame.image.load(r'screen0.png')
     screen1 = pygame.image.load(r'screen1.png')
     screen2 = pygame.image.load(r'screen2.png')
@@ -355,7 +356,8 @@ if __name__ == "__main__":
 
     arrIm = [screen0, screen1, screen2, screen3, screen4, screen5]
     imag = screen0 # arrMap[0]
-    
+    '''
+
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
@@ -414,7 +416,6 @@ if __name__ == "__main__":
     done = False
     STATE = 'title'
     while not done:
-        screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             keybind()
         if up == True:
@@ -441,8 +442,8 @@ if __name__ == "__main__":
         
         
         pygame.time.wait(1000 // fps)
-        screen.fill(BG_COLOR)
         if STATE == 'title':
+            screen.fill(BG_COLOR)
             title_screen(screen)
         elif STATE == 'game':
             cool_down = checkdamage(arrGhosts, player1, cool_down)
@@ -463,10 +464,10 @@ if __name__ == "__main__":
             lever()
             
             screen_.fill
-            screen.blit(imag, (0, 0))
-            screen_.blit(imag, (0, 0))
-            # map_builder(screen_, mapp, fl)
-            # map_builder(screen, mapp, fl)
+            # screen.blit(imag, (0, 0))
+            # screen_.blit(imag, (0, 0))
+            map_builder(screen_, mapp, fl)
+            map_builder(screen, mapp, fl)
             add_ghosts()
             ghosts_update(screen)
             ghosts_update(screen_)
