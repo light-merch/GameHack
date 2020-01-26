@@ -11,7 +11,7 @@ SIZE = (1280, 1024)
 BG_COLOR = (50, 50, 50)
 START_X = 50
 START_Y = 150
-SS = 6  # Step Size
+SS = 6
 BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 37
@@ -80,7 +80,6 @@ class guard():
 
             if self.energy > 0:
                 if self.rot == 1:
-                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x + 130, player1.y + 25), 10)
                     px = player1.x + 130
                     py = player1.y + 25
                     for item in arrGhosts:
@@ -99,7 +98,6 @@ class guard():
                                           (255, 228, 0, 255/2 - (i * j) / 255))  # up
 
                 elif self.rot == 3:
-                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x - 80, player1.y + 25), 10)
                     px = player1.x - 80
                     py = player1.y + 25
                     for item in arrGhosts:
@@ -118,7 +116,6 @@ class guard():
                                 (player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i * j) / 255))
 
                 elif self.rot == 0:
-                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x + 25, player1.y - 80), 10)
                     px = player1.x + 25
                     py = player1.y - 80
                     for item in arrGhosts:
@@ -130,14 +127,13 @@ class guard():
                     for i in range(250):
                         for j in range(i // 2):
                             screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i),
-                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
 
                         for j in range(i // 2):
                             screen.set_at(
-                                (player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i * j) / 255))  # up
+                                (player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i * j) / 255))
 
                 elif self.rot == 2:
-                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x + 25, player1.y + 130), 10)
                     px = player1.x + 25
                     py = player1.y + 130
                     for item in arrGhosts:
@@ -149,11 +145,11 @@ class guard():
                     for i in range(250):
                         for j in range(i // 2):
                             screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30),
-                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
 
                         for j in range(i // 2):
                             screen.set_at((player1.x - j + 23, player1.y + i + 30),
-                                          (255, 228, 0, 255/2 - (i * j) / 255))  # up
+                                          (255, 228, 0, 255/2 - (i * j) / 255))
 
 
 def add_ghosts():
@@ -267,7 +263,7 @@ def keybind():
             else:
                 STATE = 'title'
 
-        if i.key == pygame.K_r:
+        if i.key == pygame.K_SPACE:
             if STATE == 'title':
                 if block_pos == 0:
                     STATE = 'game'
@@ -373,6 +369,16 @@ if __name__ == "__main__":
     except:
         mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
+    screen0 = pygame.image.load(r'screen0.png')
+    screen1 = pygame.image.load(r'screen1.png')
+    screen2 = pygame.image.load(r'screen2.png')
+    screen3 = pygame.image.load(r'screen3.png')
+    screen4 = pygame.image.load(r'screen4.png')
+    screen5 = pygame.image.load(r'screen5.png')
+
+    arrIm = [screen0, screen1, screen2, screen3, screen4, screen5]
+    imag = screen0  # arrMap[0]
+
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
@@ -380,6 +386,7 @@ if __name__ == "__main__":
     ghost_right = pygame.image.load(r'ghost1.png')
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
+
     try:
         cool_down = time.clock()
         cdfl = time.clock()
@@ -392,10 +399,8 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'floor2.png'))
     fl.append(pygame.image.load(r'floor3.png'))
     fl.append(pygame.image.load(r'door.png'))
-
     for i in range(15):
         fl.append(pygame.image.load('block' + str(i + 1) + '.png'))
-
     fl.append(pygame.image.load(r'gun.png'))
     fl.append(pygame.image.load(r'hp.png'))
     fl.append(pygame.image.load(r'hp2.png'))
@@ -414,11 +419,9 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'lever6.png'))
     fl.append(pygame.image.load(r'lever5.png'))
     fl.append(pygame.image.load(r'chest.png'))
-
     heart = pygame.image.load(r'heart.png')
     batt = pygame.image.load(r'batticon.png')
     crys = pygame.image.load(r'icondiamond.png')
-
     player1 = guard(START_X, START_Y)
     fps = 1000
     block_pos = 0
@@ -426,7 +429,6 @@ if __name__ == "__main__":
     powerups = [19, 20, 21, 22, 23, 24, 25]
     cango = [1, 2, 3, 4, 30, 31, 32] + powerups
     arrGhosts = []
-
     done = False
     STATE = 'title'
     while not done:
@@ -452,8 +454,6 @@ if __name__ == "__main__":
                     mapp = arrMap[MM]
                     player1.x = SIZE[0] - 10
                 player1.x -= SS
-
-        # pygame.time.wait(1000 // fps)
         if STATE == 'title':
             screen.fill(BG_COLOR)
             title_screen(screen)
@@ -469,9 +469,8 @@ if __name__ == "__main__":
                 player1.energy += pick(24) + pick(23)
             player1.diamonds += pick(25)
             lever()
-            screen_.fill
-            map_builder(screen_, mapp, fl)
-            map_builder(screen, mapp, fl)
+            screen.blit(imag, (0, 0))
+            screen_.blit(imag, (0, 0))
             add_ghosts()
             ghosts_update(screen)
             ghosts_update(screen_)
@@ -481,7 +480,7 @@ if __name__ == "__main__":
             drawenergy(player1.energy)
             drawcrystals(player1.diamonds)
         elif STATE == 'create':
-            map_builder(screen, mapp, fl)
+            map_builder(screen, mapp, fl, MM)
             np.save('neww', arrMap)
         elif STATE == 'died':
             arrGhosts = []

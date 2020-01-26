@@ -12,7 +12,7 @@ SS = 2  # Step Size
 SIZE_BLOCK = 50
 N_BLOCKS = 37
 
-def map_builder(screen, mapp, floors):
+def map_builder(screen, mapp, floors, N):
     for i in range(SIZE[0] // SIZE_BLOCK):
         pygame.draw.line(screen, (255, 255, 255), [i * SIZE_BLOCK, 0], [i * SIZE_BLOCK, SIZE[1]], 2)
 
@@ -24,3 +24,5 @@ def map_builder(screen, mapp, floors):
             for i in range(N_BLOCKS):
                 if mapp[y, x] == i + 1:
                     screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
+
+    # pygame.image.save(screen, 'screen' + str(N) + '.png')
