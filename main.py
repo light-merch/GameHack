@@ -60,6 +60,7 @@ class guard():
         except:
             self.cdfl = time.process_time()
 
+
     def update(self, screen):
         if player1.bulb:
             try:
@@ -70,8 +71,17 @@ class guard():
                 if time.process_time() - self.cdfl > 5:
                     self.cdfl = time.process_time()
                     self.energy -= 1
+
             if self.energy > 0:
                 if self.rot == 1:
+                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x + 130, player1.y + 25), 10)
+                    px = player1.x + 130
+                    py = player1.y + 25
+                    for item in arrGhosts:
+                        if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
+                            item.x = -10000
+                            item.y = -10000
+
                     for i in range(250):
                         for j in range(i // 2):
                             screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
@@ -80,6 +90,14 @@ class guard():
                             screen.set_at((player1.x + 50 + i, player1.y - j + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
 
                 elif self.rot == 3:
+                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x - 80, player1.y + 25), 10)
+                    px = player1.x - 80
+                    py = player1.y + 25
+                    for item in arrGhosts:
+                        if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
+                            item.x = -10000
+                            item.y = -10000
+
                     for i in range(250):
                         for j in range(i // 2):
                             screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
@@ -88,6 +106,14 @@ class guard():
                             screen.set_at((player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i *  j) / 255))
 
                 elif self.rot == 0:
+                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x + 25, player1.y - 80), 10)
+                    px = player1.x + 25
+                    py = player1.y - 80
+                    for item in arrGhosts:
+                        if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
+                            item.x = -10000
+                            item.y = -10000
+
                     for i in range(250):
                         for j in range(i // 2):
                             screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
@@ -96,6 +122,14 @@ class guard():
                             screen.set_at((player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
 
                 elif self.rot == 2:
+                    # pygame.draw.circle(screen, (255, 255, 255), (player1.x + 25, player1.y + 130), 10)
+                    px = player1.x + 25
+                    py = player1.y + 130
+                    for item in arrGhosts:
+                        if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
+                            item.x = -10000
+                            item.y = -10000
+
                     for i in range(250):
                         for j in range(i // 2):
                             screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
