@@ -54,9 +54,12 @@ class guard():
         self.bulb = False
         self.lives = 3
         self.shots = 0
-        self.energy = 10
+        self.energy = 5
         self.diamonds = 0
-
+        try:
+            self.cdfl = time.clock()
+        except:
+            self.cdfl = time.process_time()
 
     def update(self, screen):
         pygame.draw.circle(screen, (255,255,255), (player1.x, player1.y),10)
@@ -64,37 +67,46 @@ class guard():
         pygame.draw.circle(screen, (63,63,63), (player1.x, player1.y + 40),10)
         pygame.draw.circle(screen, (0,0,0), (player1.x + 40, player1.y + 40),10)
         if player1.bulb:
-            if self.rot == 1:
-                for i in range(250):
-                    for j in range(i // 2):
-                        screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+            try:
+                if time.clock() - self.cdfl > 5:
+                    self.cdfl = time.clock()
+                    self.energy -= 1
+            except:
+                if time.process_time() - self.cdfl > 5:
+                    self.cdfl = time.process_time()
+                    self.energy -= 1
+            if self.energy > 0:
+                if self.rot == 1:
+                    for i in range(250):
+                        for j in range(i // 2):
+                            screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
 
-                    for j in range(i // 2):
-                        screen.set_at((player1.x + 50 + i, player1.y - j + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+                        for j in range(i // 2):
+                            screen.set_at((player1.x + 50 + i, player1.y - j + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
 
-            elif self.rot == 3:
-                for i in range(250):
-                    for j in range(i // 2):
-                        screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
+                elif self.rot == 3:
+                    for i in range(250):
+                        for j in range(i // 2):
+                            screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
 
-                    for j in range(i // 2):
-                        screen.set_at((player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i *  j) / 255))
+                        for j in range(i // 2):
+                            screen.set_at((player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i *  j) / 255))
 
-            if self.rot == 0:
-                for i in range(250):
-                    for j in range(i // 2):
-                        screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                elif self.rot == 0:
+                    for i in range(250):
+                        for j in range(i // 2):
+                            screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
 
-                    for j in range(i // 2):
-                        screen.set_at((player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+                        for j in range(i // 2):
+                            screen.set_at((player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
 
-            elif self.rot == 2:
-                for i in range(250):
-                    for j in range(i // 2):
-                        screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                elif self.rot == 2:
+                    for i in range(250):
+                        for j in range(i // 2):
+                            screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
 
-                    for j in range(i // 2):
-                        screen.set_at((player1.x - j + 23, player1.y + i + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+                        for j in range(i // 2):
+                            screen.set_at((player1.x - j + 23, player1.y + i + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
 
 
 def add_ghosts():
@@ -210,6 +222,10 @@ def keybind():
                     player1.bulb = False
                 else:
                     TIME_TO_UPDATE = True
+                    try:
+                        player1.cdfl = time.process_time()
+                    except:
+                        player1.cdfl = time.clock()
                     player1.bulb = True
 
         if STATE == 'title':
@@ -267,6 +283,10 @@ def keybind():
 def drawhearts(lives):
     for i in range(lives):
         screen.blit(heart,(10 + i * 60,10))
+    
+def drawenergy(energy):
+    for i in range(energy):
+        screen.blit(batt,(10 + i * 60,70))
 
 if __name__ == "__main__":
     pygame.init()
@@ -291,8 +311,10 @@ if __name__ == "__main__":
     image = image_front
     try:
         cool_down = time.clock()
+        cdfl = time.clock()
     except:
         cool_down = time.process_time()
+        cdfl = time.process_time()
 
 
     fl = []
@@ -320,6 +342,7 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'door_locked.png'))
 
     heart = pygame.image.load(r'heart.jpg')
+    batt = pygame.image.load(r'att.png')
 
     player1 = guard(START_X, START_Y)
     fps = 1000
@@ -391,6 +414,7 @@ if __name__ == "__main__":
             # screen_.blit(screen, SIZE)
             # pygame.display.flip()
             drawhearts(player1.lives)
+            drawenergy(player1.energy)
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
             np.save('neww', arrMap)
