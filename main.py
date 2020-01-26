@@ -203,7 +203,7 @@ def title_screen(screen):
 def pick(N):
     try:
         if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
-            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 1
+            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 2
             return 1
         else:
             return 0
