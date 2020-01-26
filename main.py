@@ -16,7 +16,7 @@ BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 37
 MM = 0
-FULL_SCREEN = True
+FULL_SCREEN = False
 
 class bullet():
     def __init__(self, x, y, heading):
@@ -86,7 +86,6 @@ class guard():
                         if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
                             item.x = -10000
                             item.y = -10000
-                            self.energy -= 1
 
                     for i in range(250):
                         for j in range(i // 2):
@@ -104,7 +103,6 @@ class guard():
                         if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
                             item.x = -10000
                             item.y = -10000
-                            self.energy -= 1
 
                     for i in range(250):
                         for j in range(i // 2):
@@ -122,7 +120,6 @@ class guard():
                         if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
                             item.x = -10000
                             item.y = -10000
-                            self.energy -= 1
 
                     for i in range(250):
                         for j in range(i // 2):
@@ -140,7 +137,6 @@ class guard():
                         if math.sqrt((item.x - px) * (item.x - px) + (item.y - py) * (item.y - py)) < 150:
                             item.x = -10000
                             item.y = -10000
-                            self.energy -= 1
 
                     for i in range(250):
                         for j in range(i // 2):
@@ -205,10 +201,13 @@ def title_screen(screen):
 
 
 def pick(N):
-    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
-        mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 1
-        return 1
-    else:
+    try:
+        if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
+            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 1
+            return 1
+        else:
+            return 0
+    except:
         return 0
 
 
@@ -359,6 +358,7 @@ def drawcrystals(count):
 
 
 if __name__ == "__main__":
+    print(np.load('neww.npy'))
     pygame.init()
     if FULL_SCREEN:
         screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
@@ -507,7 +507,7 @@ if __name__ == "__main__":
             arrGhosts = []
             player1.lives = 3
             try:
-                mapp = np.load('main.npy')
+                mapp = np.load('neww.npy')
             except:
                 mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
             f3 = pygame.font.SysFont('Pixar One', 48)
