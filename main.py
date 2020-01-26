@@ -14,7 +14,7 @@ START_Y = 400
 SS = 4  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
-N_BLOCKS = 32
+N_BLOCKS = 33
 MM = 0
 
 
@@ -253,13 +253,6 @@ if __name__ == "__main__":
     except:
         mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
-
-    try:
-        arrMap = np.load('neww.npy')
-        mapp = arrMap[0]
-    except:
-        mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
-
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
     image_front = pygame.image.load(r'guard2.png')
@@ -292,6 +285,7 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'lever1.png'))
     fl.append(pygame.image.load(r'lever2.png'))
     fl.append(pygame.image.load(r'lever3.png'))
+    fl.append(pygame.image.load(r'door_locked.png'))
 
     heart = pygame.image.load(r'heart.jpg')
 
