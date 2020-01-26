@@ -14,11 +14,19 @@ START_Y = 400
 SS = 4  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
-N_BLOCKS = 22
+N_BLOCKS = 32
 MM = 0
 
 
-# class_bullet
+class bullet():
+    def __init__(self, x, y, heading):
+        self.x = x
+        self.y = y
+        self.d = 4
+        self.heading = heading
+
+    def update(self):
+        pass
 
 class ghost():
     def __init__(self, x, y, side):
@@ -46,6 +54,8 @@ class guard():
         self.bulb = False
         self.lives = 3
         self.shots = 0
+        self.energy = 10
+        self.diamonds = 0
 
 
     def update(self, screen):
@@ -211,7 +221,8 @@ def keybind():
                 else:
                     MM += 1
                 mapp = arrMap[MM]
-            
+
+
     elif i.type == pygame.KEYUP:
         if i.key == pygame.K_w:
             up = False
@@ -235,6 +246,13 @@ if __name__ == "__main__":
     screen_.fill(BG_COLOR)
     
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
+    
+    try:
+        arrMap = np.load('neww.npy')
+        mapp = arrMap[0]
+    except:
+        mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
+
 
     try:
         arrMap = np.load('neww.npy')
@@ -255,6 +273,7 @@ if __name__ == "__main__":
     fl = []
     fl.append(pygame.image.load(r'floor.png'))
     fl.append(pygame.image.load(r'floor2.png'))
+    fl.append(pygame.image.load(r'floor3.png'))
     fl.append(pygame.image.load(r'door.png'))
 
     for i in range(15):
@@ -262,8 +281,17 @@ if __name__ == "__main__":
 
     fl.append(pygame.image.load(r'gun.png'))
     fl.append(pygame.image.load(r'hp.png'))
+    fl.append(pygame.image.load(r'hp2.png'))
     fl.append(pygame.image.load(r'battery.png'))
     fl.append(pygame.image.load(r'battery2.png'))
+    fl.append(pygame.image.load(r'diamond2.png'))
+    fl.append(pygame.image.load(r'diamond1.png'))
+    fl.append(pygame.image.load(r'sculpt3.png'))
+    fl.append(pygame.image.load(r'sculpt4.png'))
+    fl.append(pygame.image.load(r'sculpt7.png'))
+    fl.append(pygame.image.load(r'lever1.png'))
+    fl.append(pygame.image.load(r'lever2.png'))
+    fl.append(pygame.image.load(r'lever3.png'))
 
     heart = pygame.image.load(r'heart.jpg')
 
@@ -271,8 +299,8 @@ if __name__ == "__main__":
     fps = 1000
     block_pos = 0
     left, right, up, down = False, False, False, False
-    powerups = [20,21,22]
-    cango = [1,2,3] + powerups
+    powerups = [19, 20, 21, 22, 23, 24, 25]
+    cango = [1, 2, 3] + powerups
     arrGhosts = []
 
     done = False
@@ -313,13 +341,17 @@ if __name__ == "__main__":
             title_screen(screen)
         elif STATE == 'game':
             cool_down = checkdamage(arrGhosts, player1, cool_down)
+            print(player1.shots)
             if player1.lives < 1:
                 STATE = 'died'
             if player1.lives < 4:
                 player1.lives += pick(20)
 
             if player1.shots < 20:
-                player1.shots += 4 * pick(21) + 4 * pick(22)
+                player1.shots += 5 * pick(19)
+
+            if player1.energy < 100:
+                player1.energy += 10 * pick(21) + 10 * pick(22)
 
             map_builder(screen, mapp, fl)
             add_ghosts()
