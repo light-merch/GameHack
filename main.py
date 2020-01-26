@@ -390,7 +390,7 @@ if __name__ == "__main__":
                 player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
-                player1.energy += 10 * pick(24) + 10 * pick(25)
+                player1.energy += pick(24) + pick(25)
 
             lever()
             
