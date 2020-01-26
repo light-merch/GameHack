@@ -43,7 +43,6 @@ class ghost():
         self.side = side
 
     def update(self):
-        c = 0
         dx = player1.x - self.x
         dy = player1.y - self.y
         angle = math.atan2(dy, dx)
@@ -67,7 +66,6 @@ class guard():
             self.cdfl = time.clock()
         except:
             self.cdfl = time.process_time()
-
 
     def update(self, screen):
         if player1.bulb:
@@ -432,7 +430,6 @@ if __name__ == "__main__":
     done = False
     STATE = 'title'
     while not done:
-        screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             keybind()
         if up == True:
@@ -456,40 +453,30 @@ if __name__ == "__main__":
                     player1.x = SIZE[0] - 10
                 player1.x -= SS
 
-        pygame.time.wait(1000 // fps)
-        screen.fill(BG_COLOR)
+        # pygame.time.wait(1000 // fps)
         if STATE == 'title':
+            screen.fill(BG_COLOR)
             title_screen(screen)
-            pygame.image.save(screen, 'title' + str(block_pos) + '.png')
         elif STATE == 'game':
             cool_down = checkdamage(arrGhosts, player1, cool_down)
             if player1.lives < 1:
                 STATE = 'died'
-
             if player1.lives < 4:
                 player1.lives += pick(21) + pick(22)
             if player1.shots < 20:
                 player1.shots += 5 * pick(20)
             if player1.energy < 10:
                 player1.energy += pick(24) + pick(23)
-
             player1.diamonds += pick(25)
-
             lever()
-
             screen_.fill
             map_builder(screen_, mapp, fl)
             map_builder(screen, mapp, fl)
             add_ghosts()
             ghosts_update(screen)
             ghosts_update(screen_)
-
             player1.update(screen)
-            #TIME_TO_UPDATE = False
-
             screen.blit(image, (player1.x, player1.y))
-            # screen_.blit(screen, SIZE)
-            # pygame.display.flip()
             drawhearts(player1.lives)
             drawenergy(player1.energy)
             drawcrystals(player1.diamonds)
@@ -510,10 +497,6 @@ if __name__ == "__main__":
             pygame.display.update()
             pygame.time.wait(1000)
             STATE = 'title'
-
-        # screen.fill(BG_COLOR)
         screen_.blit(screen, (0, 0))
         pygame.display.flip()
-        # pygame.display.update()
-
     pygame.quit()
