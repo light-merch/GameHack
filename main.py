@@ -16,7 +16,7 @@ BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 37
 MM = 0
-
+FULL_SCREEN = True
 
 class bullet():
     def __init__(self, x, y, heading):
@@ -182,13 +182,16 @@ def ghosts_update(screen):
 
 def title_screen(screen):
     if block_pos == 0:
-        pygame.draw.rect(screen, (255, 255, 255), (400, 100, 410, 100))
+        screen.blit(title0, (0, 0))
+        # pygame.draw.rect(screen, (255, 255, 255), (400, 100, 410, 100))
     elif block_pos == 1:
-        pygame.draw.rect(screen, (255, 255, 255), (400, 210, 415, 150))
+        screen.blit(title1, (0, 0))
+        # pygame.draw.rect(screen, (255, 255, 255), (400, 210, 415, 150))
     elif block_pos == 2:
-        pygame.draw.rect(screen, (255, 255, 255), (400, 470, 410, 110))
+        screen.blit(title2, (0, 0))
+        # pygame.draw.rect(screen, (255, 255, 255), (400, 470, 410, 110))
 
-    f2 = pygame.font.SysFont('Pixar One', 60)
+    '''f2 = pygame.font.SysFont('Pixar One', 60)
     text2 = f2.render("START", 0, (0, 180, 0))
     screen.blit(text2, (515, 100))
 
@@ -198,7 +201,7 @@ def title_screen(screen):
 
     f3 = pygame.font.SysFont('Pixar One', 48)
     text3 = f3.render("EXIT", 0, (0, 180, 0))
-    screen.blit(text3, (540, 500))
+    screen.blit(text3, (540, 500))'''
 
 
 def pick(N):
@@ -357,8 +360,10 @@ def drawcrystals(count):
 
 if __name__ == "__main__":
     pygame.init()
-    # screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    screen_ = pygame.display.set_mode(SIZE)
+    if FULL_SCREEN:
+        screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    else:
+        screen_ = pygame.display.set_mode(SIZE)
     screen_.fill(BG_COLOR)
 
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
@@ -424,6 +429,11 @@ if __name__ == "__main__":
     heart = pygame.image.load(r'heart.png')
     batt = pygame.image.load(r'batticon.png')
     crys = pygame.image.load(r'icondiamond.png')
+
+    title0 = pygame.image.load(r'title0.png')
+    title1 = pygame.image.load(r'title1.png')
+    title2 = pygame.image.load(r'title2.png')
+
     player1 = guard(START_X, START_Y)
     fps = 1000
     block_pos = 0
@@ -434,6 +444,7 @@ if __name__ == "__main__":
     done = False
     STATE = 'title'
     while not done:
+        screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             keybind()
         if up == True:
@@ -479,8 +490,8 @@ if __name__ == "__main__":
             screen_.fill
             # screen.blit(imag, (0, 0))
             # screen_.blit(imag, (0, 0))
-            map_builder(screen_, mapp, fl)
-            map_builder(screen, mapp, fl)
+            map_builder(screen_, mapp, fl, MM)
+            map_builder(screen, mapp, fl, MM)
             add_ghosts()
             ghosts_update(screen)
             ghosts_update(screen_)
@@ -506,6 +517,7 @@ if __name__ == "__main__":
             pygame.display.update()
             pygame.time.wait(1000)
             STATE = 'title'
+
         screen_.blit(screen, (0, 0))
         pygame.display.flip()
     pygame.quit()
