@@ -14,9 +14,8 @@ START_Y = 150
 SS = 6  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
-N_BLOCKS = 33
+N_BLOCKS = 37
 MM = 0
-TIME_TO_UPDATE = False
 
 
 class bullet():
@@ -40,11 +39,10 @@ class ghost():
         dx = player1.x - self.x
         dy = player1.y - self.y
         angle = math.atan2(dy, dx)
-
         dx2 = math.cos(angle) * BSS
         dy2 = math.sin(angle) * BSS
-        self.x += dx2 # new_dx
-        self.y += dy2 # new_dy
+        self.x += dx2
+        self.y += dy2
     
 
 class guard():
@@ -115,6 +113,11 @@ def ghosts_update(screen):
             screen.blit(ghost_left, (item.x, item.y))
         else:
             screen.blit(ghost_right, (item.x, item.y))
+        
+        if (item.x > player1.x):
+            item.side = 'left'
+        else:
+            item.side = 'right'
 
 
 def title_screen(screen):
@@ -151,16 +154,20 @@ def lever():
                 if mapp[y, x] == 33:
                     mapp[y, x] = 4
 
-        #mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 4
+        mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] += 4
 
 
 def checkdamage(arrGhosts, player, cool_down):
     for item in arrGhosts:
         if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
-            # print(player.lives)
-            if time.clock() - cool_down >= 2:
-                player.lives -= 1
-                cool_down = time.clock()
+            try:
+                if time.clock() - cool_down >= 2:
+                    player.lives -= 1
+                    cool_down = time.clock()
+            except:
+                if time.process_time() - cool_down >= 2:
+                    player.lives -= 1
+                    cool_down = time.process_time()
 
     return cool_down
 
@@ -270,12 +277,11 @@ def keybind():
 def drawhearts(lives):
     for i in range(lives):
         screen.blit(heart,(10 + i * 60,10))
-        # print(10 + i * 60,10)
 
 if __name__ == "__main__":
     pygame.init()
     screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    # screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
+    # screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
     
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
@@ -293,7 +299,10 @@ if __name__ == "__main__":
     ghost_right = pygame.image.load(r'ghost1.png')
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
-    cool_down = time.clock()
+    try:
+        cool_down = time.clock()
+    except:
+        cool_down = time.process_time()
 
 
     fl = []
@@ -319,6 +328,10 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'lever2.png'))
     fl.append(pygame.image.load(r'lever3.png'))
     fl.append(pygame.image.load(r'door_locked.png'))
+    fl.append(pygame.image.load(r'lever7.png'))
+    fl.append(pygame.image.load(r'lever6.png'))
+    fl.append(pygame.image.load(r'lever5.png'))
+    fl.append(pygame.image.load(r'chest.png'))
 
     heart = pygame.image.load(r'heart.jpg')
 
@@ -336,7 +349,6 @@ if __name__ == "__main__":
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             keybind()
-
         if up == True:
             if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
@@ -346,7 +358,6 @@ if __name__ == "__main__":
                     MM += 1
                     mapp = arrMap[MM]
                     player1.x = 10
-
                 player1.x += SS
         if down == True:
             if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
@@ -357,7 +368,6 @@ if __name__ == "__main__":
                     MM -= 1
                     mapp = arrMap[MM]
                     player1.x = SIZE[0] - 10
-
                 player1.x -= SS
 
         
@@ -368,13 +378,11 @@ if __name__ == "__main__":
             title_screen(screen)
         elif STATE == 'game':
             cool_down = checkdamage(arrGhosts, player1, cool_down)
-            # print(player1.shots)
             if player1.lives < 1:
                 STATE = 'died'
 
             if player1.lives < 4:
                 player1.lives += pick(21)
-
             if player1.lives < 4:
                 player1.lives += pick(22)
 
@@ -382,7 +390,7 @@ if __name__ == "__main__":
                 player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
-                player1.energy += 10 * pick(22) + 10 * pick(23)
+                player1.energy += 10 * pick(24) + 10 * pick(25)
 
             lever()
             
