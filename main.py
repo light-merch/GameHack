@@ -296,12 +296,12 @@ def drawhearts(lives):
     
 def drawenergy(energy):
     for i in range(energy):
-        screen.blit(batt,(10 + i * 60,70))
+        screen.blit(batt,(10 + i * 60, 70))
 
 if __name__ == "__main__":
     pygame.init()
-    # screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
+    screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    #screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
     
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
