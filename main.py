@@ -16,6 +16,7 @@ BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 33
 MM = 0
+TIME_TO_UPDATE = False
 
 
 class bullet():
@@ -294,7 +295,7 @@ if __name__ == "__main__":
     block_pos = 0
     left, right, up, down = False, False, False, False
     powerups = [19, 20, 21, 22, 23, 24, 25]
-    cango = [1, 2, 3] + powerups
+    cango = [1, 2, 3, 4] + powerups
     arrGhosts = []
 
     done = False
@@ -330,7 +331,6 @@ if __name__ == "__main__":
         
         
         pygame.time.wait(1000 // fps)
-        screen.fill(BG_COLOR)
         if STATE == 'title':
             title_screen(screen)
         elif STATE == 'game':
@@ -342,15 +342,17 @@ if __name__ == "__main__":
                 player1.lives += pick(20)
 
             if player1.shots < 20:
-                player1.shots += 5 * pick(19)
+                player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
-                player1.energy += 10 * pick(21) + 10 * pick(22)
+                player1.energy += 10 * pick(22) + 10 * pick(23)
 
             map_builder(screen, mapp, fl)
             add_ghosts()
             ghosts_update(screen)
+
             player1.update(screen)
+            #TIME_TO_UPDATE = False
 
             screen.blit(image, (player1.x, player1.y))
             # screen_.blit(screen, SIZE)
