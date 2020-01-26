@@ -40,11 +40,10 @@ class ghost():
         dx = player1.x - self.x
         dy = player1.y - self.y
         angle = math.atan2(dy, dx)
-
         dx2 = math.cos(angle) * BSS
         dy2 = math.sin(angle) * BSS
-        self.x += dx2 # new_dx
-        self.y += dy2 # new_dy
+        self.x += dx2
+        self.y += dy2
     
 
 class guard():
@@ -60,6 +59,10 @@ class guard():
 
 
     def update(self, screen):
+        pygame.draw.circle(screen, (255,255,255), (player1.x, player1.y),10)
+        pygame.draw.circle(screen, (127,127,127), (player1.x + 40, player1.y),10)
+        pygame.draw.circle(screen, (63,63,63), (player1.x, player1.y + 40),10)
+        pygame.draw.circle(screen, (0,0,0), (player1.x + 40, player1.y + 40),10)
         if player1.bulb:
             if self.rot == 1:
                 for i in range(200):
@@ -125,10 +128,14 @@ def pick(N):
 def checkdamage(arrGhosts, player, cool_down):
     for item in arrGhosts:
         if abs(player.x - item.x) <= 20 and abs(player.y - item.y) <= 20:
-            # print(player.lives)
-            if time.clock() - cool_down >= 2:
-                player.lives -= 1
-                cool_down = time.clock()
+            try:
+                if time.clock() - cool_down >= 2:
+                    player.lives -= 1
+                    cool_down = time.clock()
+            except:
+                if time.process_time() - cool_down >= 2:
+                    player.lives -= 1
+                    cool_down = time.process_time()
 
     return cool_down
 
@@ -238,12 +245,11 @@ def keybind():
 def drawhearts(lives):
     for i in range(lives):
         screen.blit(heart,(10 + i * 60,10))
-        # print(10 + i * 60,10)
 
 if __name__ == "__main__":
     pygame.init()
-    screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    # screen = pygame.display.set_mode(SIZE, pygame.NOFRAME)
+    # screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
     
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
@@ -261,7 +267,10 @@ if __name__ == "__main__":
     ghost_right = pygame.image.load(r'ghost1.png')
     ghost_left = pygame.image.load(r'ghost2.png')
     image = image_front
-    cool_down = time.clock()
+    try:
+        cool_down = time.clock()
+    except:
+        cool_down = time.process_time()
 
 
     fl = []
@@ -295,7 +304,7 @@ if __name__ == "__main__":
     block_pos = 0
     left, right, up, down = False, False, False, False
     powerups = [19, 20, 21, 22, 23, 24, 25]
-    cango = [1, 2, 3, 4] + powerups
+    cango = [0, 1, 2, 3, 4] + powerups
     arrGhosts = []
 
     done = False
@@ -304,7 +313,6 @@ if __name__ == "__main__":
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             keybind()
-
         if up == True:
             if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
@@ -314,7 +322,6 @@ if __name__ == "__main__":
                     MM += 1
                     mapp = arrMap[MM]
                     player1.x = 10
-
                 player1.x += SS
         if down == True:
             if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
@@ -325,7 +332,6 @@ if __name__ == "__main__":
                     MM -= 1
                     mapp = arrMap[MM]
                     player1.x = SIZE[0] - 10
-
                 player1.x -= SS
 
         
@@ -335,11 +341,10 @@ if __name__ == "__main__":
             title_screen(screen)
         elif STATE == 'game':
             cool_down = checkdamage(arrGhosts, player1, cool_down)
-            print(player1.shots)
             if player1.lives < 1:
                 STATE = 'died'
             if player1.lives < 4:
-                player1.lives += pick(20)
+                player1.lives += pick(21)
 
             if player1.shots < 20:
                 player1.shots += 5 * pick(20)
