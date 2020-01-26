@@ -246,7 +246,7 @@ def keybind():
             else:
                 STATE = 'title'
 
-        if i.key == pygame.K_SPACE:
+        if i.key == pygame.K_r:
             if STATE == 'title':
                 if block_pos == 0:
                     STATE = 'game'
@@ -368,7 +368,7 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'door.png'))
 
     for i in range(15):
-        fl.append(pygame.image.load(f'block{i + 1}.png'))
+        fl.append(pygame.image.load('block' + str(i + 1) + '.png'))
 
     fl.append(pygame.image.load(r'gun.png'))
     fl.append(pygame.image.load(r'hp.png'))
