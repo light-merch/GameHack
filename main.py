@@ -267,7 +267,7 @@ def keybind():
             else:
                 STATE = 'title'
 
-        if i.key == pygame.K_SPACE:
+        if i.key == pygame.K_r:
             if STATE == 'title':
                 if block_pos == 0:
                     STATE = 'game'
