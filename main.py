@@ -9,14 +9,13 @@ from map_builder import map_builder
 
 SIZE = (1280, 1024)
 BG_COLOR = (50, 50, 50)
-START_X = 500
-START_Y = 400
-SS = 4  # Step Size
+START_X = 50
+START_Y = 150
+SS = 6  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
-N_BLOCKS = 33
+N_BLOCKS = 37
 MM = 0
-TIME_TO_UPDATE = False
 
 
 class bullet():
@@ -62,10 +61,6 @@ class guard():
             self.cdfl = time.process_time()
 
     def update(self, screen):
-        pygame.draw.circle(screen, (255,255,255), (player1.x, player1.y),10)
-        pygame.draw.circle(screen, (127,127,127), (player1.x + 40, player1.y),10)
-        pygame.draw.circle(screen, (63,63,63), (player1.x, player1.y + 40),10)
-        pygame.draw.circle(screen, (0,0,0), (player1.x + 40, player1.y + 40),10)
         if player1.bulb:
             try:
                 if time.clock() - self.cdfl > 5:
@@ -130,6 +125,11 @@ def ghosts_update(screen):
             screen.blit(ghost_left, (item.x, item.y))
         else:
             screen.blit(ghost_right, (item.x, item.y))
+        
+        if (item.x > player1.x):
+            item.side = 'left'
+        else:
+            item.side = 'right'
 
 
 def title_screen(screen):
@@ -158,6 +158,16 @@ def pick(N):
         return 1
     else:
         return 0
+
+def lever():
+    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
+        for y in range(SIZE[1] // SIZE_BLOCK):
+            for x in range(SIZE[0] // SIZE_BLOCK):
+                if mapp[y, x] == 33:
+                    mapp[y, x] = 4
+
+        mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] += 4
+
 
 def checkdamage(arrGhosts, player, cool_down):
     for item in arrGhosts:
@@ -290,8 +300,8 @@ def drawenergy(energy):
 
 if __name__ == "__main__":
     pygame.init()
-    # screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
+    screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    # screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
     
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
@@ -340,6 +350,10 @@ if __name__ == "__main__":
     fl.append(pygame.image.load(r'lever2.png'))
     fl.append(pygame.image.load(r'lever3.png'))
     fl.append(pygame.image.load(r'door_locked.png'))
+    fl.append(pygame.image.load(r'lever7.png'))
+    fl.append(pygame.image.load(r'lever6.png'))
+    fl.append(pygame.image.load(r'lever5.png'))
+    fl.append(pygame.image.load(r'chest.png'))
 
     heart = pygame.image.load(r'heart.jpg')
     batt = pygame.image.load(r'att.png')
@@ -349,7 +363,7 @@ if __name__ == "__main__":
     block_pos = 0
     left, right, up, down = False, False, False, False
     powerups = [19, 20, 21, 22, 23, 24, 25]
-    cango = [0, 1, 2, 3, 4] + powerups
+    cango = [1, 2, 3, 4, 30, 31, 32] + powerups
     arrGhosts = []
 
     done = False
@@ -389,6 +403,7 @@ if __name__ == "__main__":
             cool_down = checkdamage(arrGhosts, player1, cool_down)
             if player1.lives < 1:
                 STATE = 'died'
+
             if player1.lives < 4:
                 player1.lives += pick(21)
             if player1.lives < 4:
@@ -398,7 +413,9 @@ if __name__ == "__main__":
                 player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
-                player1.energy += 10 * pick(22) + 10 * pick(23)
+                player1.energy += 10 * pick(24) + 10 * pick(25)
+
+            lever()
             
             screen_.fill
             map_builder(screen_, mapp, fl)
