@@ -200,10 +200,10 @@ def title_screen(screen):
     screen.blit(text3, (540, 500))'''
 
 
-def pick(N):
+def pick(N, m):
     try:
         if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
-            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 2
+            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = m
             return 1
         else:
             return 0
@@ -214,11 +214,13 @@ def pick(N):
 def lever():
     try:
         if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
+            print('hey')
             for y in range(SIZE[1] // SIZE_BLOCK):
                 for x in range(SIZE[0] // SIZE_BLOCK):
                     if mapp[y, x] == 33:
                         mapp[y, x] = 4
             mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] += 4
+
     except:
         pass
 
@@ -267,7 +269,7 @@ def keybind():
             else:
                 STATE = 'title'
 
-        if i.key == pygame.K_r:
+        if i.key == pygame.K_SPACE:
             if STATE == 'title':
                 if block_pos == 0:
                     STATE = 'game'
@@ -440,8 +442,8 @@ if __name__ == "__main__":
     fps = 1000
     block_pos = 0
     left, right, up, down = False, False, False, False
-    powerups = [19, 20, 21, 22, 23, 24, 25]
-    cango = [1, 2, 3, 4, 30, 31, 32] + powerups
+    powerups = [19, 20, 21, 22, 23, 24, 25, 30, 31, 32]
+    cango = [1, 2, 3, 4] + powerups
     arrGhosts = []
     done = False
     STATE = 'title'
@@ -482,12 +484,12 @@ if __name__ == "__main__":
             if player1.lives < 1:
                 STATE = 'died'
             if player1.lives < 4:
-                player1.lives += pick(21) + pick(22)
+                player1.lives += pick(21, 1) + pick(22, 2)
             if player1.shots < 20:
-                player1.shots += 5 * pick(20)
+                player1.shots += 5 * pick(20, 2)
             if player1.energy < 10:
-                player1.energy += pick(24) + pick(23)
-            player1.diamonds += pick(25)
+                player1.energy += pick(24, 1) + pick(23, 2)
+            player1.diamonds += pick(25, 1)
             lever()
             
             screen_.fill
