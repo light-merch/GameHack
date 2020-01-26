@@ -28,6 +28,7 @@ class bullet():
     def update(self):
         pass
 
+
 class ghost():
     def __init__(self, x, y, side):
         self.x = x
@@ -43,7 +44,7 @@ class ghost():
         dy2 = math.sin(angle) * BSS
         self.x += dx2
         self.y += dy2
-    
+
 
 class guard():
     def __init__(self, x, y):
@@ -74,34 +75,42 @@ class guard():
                 if self.rot == 1:
                     for i in range(250):
                         for j in range(i // 2):
-                            screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                            screen.set_at((player1.x + 50 + i, player1.y + int(i / 2) - j + 30),
+                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
 
                         for j in range(i // 2):
-                            screen.set_at((player1.x + 50 + i, player1.y - j + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+                            screen.set_at((player1.x + 50 + i, player1.y - j + 30),
+                                          (255, 228, 0, 255/2 - (i * j) / 255))  # up
 
                 elif self.rot == 3:
                     for i in range(250):
                         for j in range(i // 2):
-                            screen.set_at((player1.x - i + 10, player1.y - int(i / 2) + j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
+                            screen.set_at((player1.x - i + 10, player1.y - int(i / 2) +
+                                           j + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))
 
                         for j in range(i // 2):
-                            screen.set_at((player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i *  j) / 255))
+                            screen.set_at(
+                                (player1.x - i + 10, player1.y + j + 30), (255, 228, 0, 255/2 - (i * j) / 255))
 
                 elif self.rot == 0:
                     for i in range(250):
                         for j in range(i // 2):
-                            screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                            screen.set_at((player1.x + int(i / 2) - j + 18, player1.y - i),
+                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
 
                         for j in range(i // 2):
-                            screen.set_at((player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+                            screen.set_at(
+                                (player1.x - j + 20, player1.y - i), (255, 228, 0, 255/2 - (i * j) / 255))  # up
 
                 elif self.rot == 2:
                     for i in range(250):
                         for j in range(i // 2):
-                            screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30), (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
+                            screen.set_at((player1.x + int(i / 2) - j + 18, player1.y + i + 30),
+                                          (255, 228, 0, 255/2 - (i * (255/2 - j)) / 255))  # down
 
                         for j in range(i // 2):
-                            screen.set_at((player1.x - j + 23, player1.y + i + 30), (255, 228, 0, 255/2 - (i *  j) / 255)) # up
+                            screen.set_at((player1.x - j + 23, player1.y + i + 30),
+                                          (255, 228, 0, 255/2 - (i * j) / 255))  # up
 
 
 def add_ghosts():
@@ -125,7 +134,7 @@ def ghosts_update(screen):
             screen.blit(ghost_left, (item.x, item.y))
         else:
             screen.blit(ghost_right, (item.x, item.y))
-        
+
         if (item.x > player1.x):
             item.side = 'left'
         else:
@@ -152,12 +161,14 @@ def title_screen(screen):
     text3 = f3.render("EXIT", 0, (0, 180, 0))
     screen.blit(text3, (540, 500))
 
+
 def pick(N):
     if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
         mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 1
         return 1
     else:
         return 0
+
 
 def lever():
     if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
@@ -183,6 +194,7 @@ def checkdamage(arrGhosts, player, cool_down):
 
     return cool_down
 
+
 def keybind():
     global image, STATE, block_pos, i, done, left, right, up, down, mapp, MM, screen, TIME_TO_UPDATE
     if i.type == pygame.QUIT:
@@ -204,7 +216,7 @@ def keybind():
                 mapp[by, bx] = N_BLOCKS
             else:
                 mapp[by, bx] -= 1
-    
+
     elif i.type == pygame.KEYDOWN:
         if i.key == pygame.K_ESCAPE:
             if STATE == 'title':
@@ -278,7 +290,6 @@ def keybind():
                     MM += 1
                 mapp = arrMap[MM]
 
-
     elif i.type == pygame.KEYUP:
         if i.key == pygame.K_w:
             up = False
@@ -290,22 +301,31 @@ def keybind():
             right = False
 
 
-def drawhearts(lives):
-    for i in range(lives):
-        screen.blit(heart,(10 + i * 60,10))
-    
-def drawenergy(energy):
+def drawhearts(lives1,lives2):
+    for i in range(lives1):
+        screen.blit(heart, (10 + i * 60, 10))
+    for i in range(lives2):
+        screen.blit(heart, (1000 + i * 60, 10))
+
+
+def drawenergy(energy1, energy2):
     for i in range(energy):
-        screen.blit(batt,(10 + i * 60,70))
+        screen.blit(batt, (10 + i * 60, 70))
+
+
+def drawcrystals(count1, count2):
+    for i in range(count):
+        screen.blit(crys, (10 + i * 60, 130))
+
 
 if __name__ == "__main__":
     pygame.init()
     # screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
     screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
-    
+
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
-    
+
     try:
         arrMap = np.load('neww.npy')
         mapp = arrMap[0]
@@ -325,7 +345,6 @@ if __name__ == "__main__":
     except:
         cool_down = time.process_time()
         cdfl = time.process_time()
-
 
     fl = []
     fl.append(pygame.image.load(r'floor.png'))
@@ -357,6 +376,7 @@ if __name__ == "__main__":
 
     heart = pygame.image.load(r'heart.jpg')
     batt = pygame.image.load(r'att.png')
+    crys = pygame.image.load(r'icondiamond.png')
 
     player1 = guard(START_X, START_Y)
     fps = 1000
@@ -375,7 +395,7 @@ if __name__ == "__main__":
         if up == True:
             if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
                 player1.y -= SS
-        if right == True: 
+        if right == True:
             if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
                 if player1.x > SIZE[0] - 100 and MM != 5:
                     MM += 1
@@ -393,8 +413,6 @@ if __name__ == "__main__":
                     player1.x = SIZE[0] - 10
                 player1.x -= SS
 
-        
-        
         pygame.time.wait(1000 // fps)
         screen.fill(BG_COLOR)
         if STATE == 'title':
@@ -405,18 +423,16 @@ if __name__ == "__main__":
                 STATE = 'died'
 
             if player1.lives < 4:
-                player1.lives += pick(21)
-            if player1.lives < 4:
-                player1.lives += pick(22)
-
+                player1.lives += pick(21) + pick(22)
             if player1.shots < 20:
                 player1.shots += 5 * pick(20)
+            if player1.energy < 10:
+                player1.energy += pick(24) + pick(23)
 
-            if player1.energy < 100:
-                player1.energy += pick(24) + pick(25)
+            player1.diamonds += pick(25)
 
             lever()
-            
+
             screen_.fill
             map_builder(screen_, mapp, fl)
             map_builder(screen, mapp, fl)
@@ -432,6 +448,7 @@ if __name__ == "__main__":
             # pygame.display.flip()
             drawhearts(player1.lives)
             drawenergy(player1.energy)
+            drawcrystals(player1.diamonds)
         elif STATE == 'create':
             map_builder(screen, mapp, fl)
             np.save('neww', arrMap)
