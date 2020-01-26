@@ -300,8 +300,8 @@ def drawenergy(energy):
 
 if __name__ == "__main__":
     pygame.init()
-    screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
-    # screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
+    # screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
+    screen_ = pygame.display.set_mode(SIZE, pygame.NOFRAME)
     screen_.fill(BG_COLOR)
     
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
@@ -413,7 +413,7 @@ if __name__ == "__main__":
                 player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
-                player1.energy += 10 * pick(24) + 10 * pick(25)
+                player1.energy += pick(24) + pick(25)
 
             lever()
             
