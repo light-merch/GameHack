@@ -212,13 +212,15 @@ def pick(N):
 
 
 def lever():
-    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
-        for y in range(SIZE[1] // SIZE_BLOCK):
-            for x in range(SIZE[0] // SIZE_BLOCK):
-                if mapp[y, x] == 33:
-                    mapp[y, x] = 4
-
-        mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] += 4
+    try:
+        if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
+            for y in range(SIZE[1] // SIZE_BLOCK):
+                for x in range(SIZE[0] // SIZE_BLOCK):
+                    if mapp[y, x] == 33:
+                        mapp[y, x] = 4
+            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] += 4
+    except:
+        pass
 
 
 def checkdamage(arrGhosts, player, cool_down):
@@ -447,28 +449,29 @@ if __name__ == "__main__":
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
             keybind()
-        if up == True:
-            if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
-                player1.y -= SS
-        if right == True:
-            if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
-                if player1.x > SIZE[0] - 100 and MM != 5:
-                    MM += 1
-                    mapp = arrMap[MM]
-                    player1.x = 10
-                player1.x += SS
-        if down == True:
-            if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
-                player1.y += SS
-        if left == True:
-            if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
-                if player1.x < 20 and MM != 0:
-                    MM -= 1
-                    mapp = arrMap[MM]
-                    player1.x = SIZE[0] - 10
-                player1.x -= SS
-
-        
+        try:
+            if up == True:
+                if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
+                    player1.y -= SS
+            if right == True:
+                if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
+                    if player1.x > SIZE[0] - 100 and MM != 5:
+                        MM += 1
+                        mapp = arrMap[MM]
+                        player1.x = 10
+                    player1.x += SS
+            if down == True:
+                if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
+                    player1.y += SS
+            if left == True:
+                if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
+                    if player1.x < 20 and MM != 0:
+                        MM -= 1
+                        mapp = arrMap[MM]
+                        player1.x = SIZE[0] - 30
+                    player1.x -= SS
+        except:
+            pass
         
         pygame.time.wait(1000 // fps)
         if STATE == 'title':
