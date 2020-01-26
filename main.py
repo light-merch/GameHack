@@ -9,9 +9,9 @@ from map_builder import map_builder
 
 SIZE = (1280, 1024)
 BG_COLOR = (50, 50, 50)
-START_X = 500
-START_Y = 400
-SS = 4  # Step Size
+START_X = 50
+START_Y = 150
+SS = 6  # Step Size
 BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 33
@@ -143,6 +143,16 @@ def pick(N):
         return 1
     else:
         return 0
+
+def lever():
+    if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
+        for y in range(SIZE[1] // SIZE_BLOCK):
+            for x in range(SIZE[0] // SIZE_BLOCK):
+                if mapp[y, x] == 33:
+                    mapp[y, x] = 4
+
+        #mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = 4
+
 
 def checkdamage(arrGhosts, player, cool_down):
     for item in arrGhosts:
@@ -317,7 +327,7 @@ if __name__ == "__main__":
     block_pos = 0
     left, right, up, down = False, False, False, False
     powerups = [19, 20, 21, 22, 23, 24, 25]
-    cango = [1, 2, 3, 4] + powerups
+    cango = [1, 2, 3, 4, 30, 31, 32] + powerups
     arrGhosts = []
 
     done = False
@@ -361,14 +371,20 @@ if __name__ == "__main__":
             # print(player1.shots)
             if player1.lives < 1:
                 STATE = 'died'
+
             if player1.lives < 4:
-                player1.lives += pick(20)
+                player1.lives += pick(21)
+
+            if player1.lives < 4:
+                player1.lives += pick(22)
 
             if player1.shots < 20:
                 player1.shots += 5 * pick(20)
 
             if player1.energy < 100:
                 player1.energy += 10 * pick(22) + 10 * pick(23)
+
+            lever()
             
             screen_.fill
             map_builder(screen_, mapp, fl)
