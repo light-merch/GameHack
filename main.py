@@ -519,7 +519,7 @@ if __name__ == "__main__":
             screen.fill(BG_COLOR)
             text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
             screen.blit(text3, (540, 500))
-            pygame.display.update()
+            pygame.display.flip()
             pygame.time.wait(1000)
             STATE = 'title'
 
