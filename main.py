@@ -16,7 +16,7 @@ BSS = 1
 SIZE_BLOCK = 50
 N_BLOCKS = 37
 MM = 0
-FULL_SCREEN = False
+FULL_SCREEN = True
 
 class bullet():
     def __init__(self, x, y, heading):
@@ -60,7 +60,7 @@ class guard():
         self.bulb = False
         self.lives = 3
         self.shots = 0
-        self.energy = 5
+        self.energy = 10
         self.diamonds = 0
         try:
             self.cdfl = time.clock()
@@ -214,7 +214,6 @@ def pick(N, m):
 def lever():
     try:
         if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
-            print('hey')
             for y in range(SIZE[1] // SIZE_BLOCK):
                 for x in range(SIZE[0] // SIZE_BLOCK):
                     if mapp[y, x] == 33:
@@ -362,7 +361,6 @@ def drawcrystals(count):
 
 
 if __name__ == "__main__":
-    print(np.load('neww.npy'))
     pygame.init()
     if FULL_SCREEN:
         screen_ = pygame.display.set_mode(SIZE, pygame.FULLSCREEN)
