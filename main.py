@@ -60,7 +60,7 @@ class guard():
         self.bulb = False
         self.lives = 3
         self.shots = 0
-        self.energy = 5
+        self.energy = 10
         self.diamonds = 0
         try:
             self.cdfl = time.clock()
