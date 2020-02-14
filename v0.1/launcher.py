@@ -1,13 +1,19 @@
 import json
+import os
+
+default_options = {'width':800,'height':600,'type':'standart'}
+
 def initiate():
     try:
-        options_dict = json.load(open('options.json','r'))
+        loaded_options = json.load(open('options.json','r'))
+        options = default_options.copy()
+        options.update(loaded_options)
+        json.dump(options,open('options.json','w'))
     except:
-        options_dict = {}
-    if options_dict.get('initiated') != True:
-        options_file = open('options.json','w')
-        options_dict['initiated'] = True
-        options_dict['width'] = int(input('Введите ширину вашего экрана(в пикселях)'))
-        options_dict['height'] = int(input('Введите высоту вашего экрана(в пикселях)'))
-        json.dump(options_dict,options_file)
-    return options_dict
+        json.dump({},open('options.json','w'))
+        initiate()
+
+
+initiate()
+
+os.system('python main.py')

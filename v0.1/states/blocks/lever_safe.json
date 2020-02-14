@@ -1,0 +1,5 @@
+{
+    "tangibility_player":0,
+    "tangibility_ghosts":1,
+    "texture":"blocks/lever_safe.png"
+}

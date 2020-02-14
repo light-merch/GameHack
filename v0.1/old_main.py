@@ -409,7 +409,7 @@ if __name__ == "__main__":
     player1 = guard(START_X, START_Y)
     fps = 1000
     block_pos = 0
-    left, right, up, down = False, False, False, False
+    left, right, up, down = False, False, False, False  
     powerups = [19, 20, 21, 22, 23, 24, 25, 30, 31, 32]
     cango = [1, 2, 3, 4] + powerups
     arrGhosts = []
