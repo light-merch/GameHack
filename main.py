@@ -1,22 +1,24 @@
-import pygame
-import numpy as np
-import math
 import datetime
 from random import randint
 import time
+import math
+
+import pygame
+import numpy as np
 
 from map_builder import map_builder
 
-SIZE = (1280, 1024)
-BG_COLOR = (50, 50, 50)
-START_X = 50
-START_Y = 150
-SS = 6
-BSS = 1
-SIZE_BLOCK = 50
-N_BLOCKS = 37
-MM = 0
-FULL_SCREEN = True
+# TODO finish params
+SIZE = (1280, 1024)         # Canvas size
+BG_COLOR = (50, 50, 50)     # Background color
+START_X = 50                # Guard start coordinate
+START_Y = 150               # Guard start coordinate
+SS = 6                      # Step size
+BSS = 1                     # Something
+SIZE_BLOCK = 50             # Something
+N_BLOCKS = 37               # Total amount of blocks textures
+MM = 0                      # Something
+FULL_SCREEN = True          # Fullscreen parameter
 
 class bullet():
     def __init__(self, x, y, heading):
@@ -376,13 +378,12 @@ if __name__ == "__main__":
     except:
         mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
-
-    image_back = pygame.image.load(r'guard0.png')
-    image_right = pygame.image.load(r'guard1.png')
-    image_front = pygame.image.load(r'guard2.png')
-    image_left = pygame.image.load(r'guard3.png')
-    ghost_right = pygame.image.load(r'ghost1.png')
-    ghost_left = pygame.image.load(r'ghost2.png')
+    image_back = pygame.image.load('textures/guard0.png')
+    image_right = pygame.image.load('textures/guard1.png')
+    image_front = pygame.image.load('textures/guard2.png')
+    image_left = pygame.image.load('textures/guard3.png')
+    ghost_right = pygame.image.load('textures/ghost1.png')
+    ghost_left = pygame.image.load('textures/ghost2.png')
     image = image_front
 
     try:
@@ -393,37 +394,37 @@ if __name__ == "__main__":
         cdfl = time.process_time()
 
     fl = []
-    fl.append(pygame.image.load(r'floor.png'))
-    fl.append(pygame.image.load(r'floor2.png'))
-    fl.append(pygame.image.load(r'floor3.png'))
-    fl.append(pygame.image.load(r'door.png'))
+    fl.append(pygame.image.load('textures/floor.png'))
+    fl.append(pygame.image.load('textures/floor2.png'))
+    fl.append(pygame.image.load('textures/floor3.png'))
+    fl.append(pygame.image.load('textures/door.png'))
     for i in range(15):
-        fl.append(pygame.image.load('block' + str(i + 1) + '.png'))
-    fl.append(pygame.image.load(r'gun.png'))
-    fl.append(pygame.image.load(r'hp.png'))
-    fl.append(pygame.image.load(r'hp2.png'))
-    fl.append(pygame.image.load(r'battery.png'))
-    fl.append(pygame.image.load(r'battery2.png'))
-    fl.append(pygame.image.load(r'diamond2.png'))
-    fl.append(pygame.image.load(r'diamond1.png'))
-    fl.append(pygame.image.load(r'sculpt3.png'))
-    fl.append(pygame.image.load(r'sculpt4.png'))
-    fl.append(pygame.image.load(r'sculpt7.png'))
-    fl.append(pygame.image.load(r'lever1.png'))
-    fl.append(pygame.image.load(r'lever2.png'))
-    fl.append(pygame.image.load(r'lever3.png'))
-    fl.append(pygame.image.load(r'door_locked.png'))
-    fl.append(pygame.image.load(r'lever7.png'))
-    fl.append(pygame.image.load(r'lever6.png'))
-    fl.append(pygame.image.load(r'lever5.png'))
-    fl.append(pygame.image.load(r'chest.png'))
-    heart = pygame.image.load(r'heart.png')
-    batt = pygame.image.load(r'batticon.png')
-    crys = pygame.image.load(r'icondiamond.png')
+        fl.append(pygame.image.load('textures/block' + str(i + 1) + '.png'))
+    fl.append(pygame.image.load('textures/gun.png'))
+    fl.append(pygame.image.load('textures/hp.png'))
+    fl.append(pygame.image.load('textures/hp2.png'))
+    fl.append(pygame.image.load('textures/battery.png'))
+    fl.append(pygame.image.load('textures/battery2.png'))
+    fl.append(pygame.image.load('textures/diamond2.png'))
+    fl.append(pygame.image.load('textures/diamond1.png'))
+    fl.append(pygame.image.load('textures/sculpt3.png'))
+    fl.append(pygame.image.load('textures/sculpt4.png'))
+    fl.append(pygame.image.load('textures/sculpt7.png'))
+    fl.append(pygame.image.load('textures/lever1.png'))
+    fl.append(pygame.image.load('textures/lever2.png'))
+    fl.append(pygame.image.load('textures/lever3.png'))
+    fl.append(pygame.image.load('textures/door_locked.png'))
+    fl.append(pygame.image.load('textures/lever7.png'))
+    fl.append(pygame.image.load('textures/lever6.png'))
+    fl.append(pygame.image.load('textures/lever5.png'))
+    fl.append(pygame.image.load('textures/chest.png'))
+    heart = pygame.image.load('textures/heart.png')
+    batt = pygame.image.load('textures/batticon.png')
+    crys = pygame.image.load('textures/icondiamond.png')
 
-    title0 = pygame.image.load(r'title0.png')
-    title1 = pygame.image.load(r'title1.png')
-    title2 = pygame.image.load(r'title2.png')
+    title0 = pygame.image.load('textures/title0.png')
+    title1 = pygame.image.load('textures/title1.png')
+    title2 = pygame.image.load('textures/title2.png')
 
     player1 = guard(START_X, START_Y)
     fps = 1000
