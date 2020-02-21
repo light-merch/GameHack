@@ -376,17 +376,6 @@ if __name__ == "__main__":
     except:
         mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
 
-    '''
-    screen0 = pygame.image.load(r'screen0.png')
-    screen1 = pygame.image.load(r'screen1.png')
-    screen2 = pygame.image.load(r'screen2.png')
-    screen3 = pygame.image.load(r'screen3.png')
-    screen4 = pygame.image.load(r'screen4.png')
-    screen5 = pygame.image.load(r'screen5.png')
-
-    arrIm = [screen0, screen1, screen2, screen3, screen4, screen5]
-    imag = screen0 # arrMap[0]
-    '''
 
     image_back = pygame.image.load(r'guard0.png')
     image_right = pygame.image.load(r'guard1.png')
