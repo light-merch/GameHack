@@ -1,18 +1,17 @@
-import pygame
-import numpy as np
-import math
 import datetime
 from random import randint
+import math
 
-SIZE = (1280, 1024)
-BG_COLOR = (50, 50, 50)
-START_X = 500
-START_Y = 400
-SS = 2  # Step Size
+import pygame
+import numpy as np
+
+
+SS = 2                      # Step Size
 SIZE_BLOCK = 50
 N_BLOCKS = 37
 
-def map_builder(screen, mapp, floors, N):
+
+def build_map(screen, mapp, floors, N, SIZE):
     for i in range(SIZE[0] // SIZE_BLOCK):
         pygame.draw.line(screen, (255, 255, 255), [i * SIZE_BLOCK, 0], [i * SIZE_BLOCK, SIZE[1]], 2)
 
@@ -25,4 +24,4 @@ def map_builder(screen, mapp, floors, N):
                 if mapp[y, x] == i + 1:
                     screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
 
-    #pygame.image.save(screen, 'screen' + str(N) + '.png')
+    # pygame.image.save(screen, 'screen' + str(N) + '.png')

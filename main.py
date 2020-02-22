@@ -6,7 +6,8 @@ import math
 import pygame
 import numpy as np
 
-from map_builder import map_builder
+from build_map import build_map
+from npcs import bullet, ghost
 
 # TODO finish params
 SIZE = (1280, 1024)         # Canvas size
@@ -14,44 +15,11 @@ BG_COLOR = (50, 50, 50)     # Background color
 START_X = 50                # Guard start coordinate
 START_Y = 150               # Guard start coordinate
 SS = 6                      # Step size
-BSS = 1                     # Something
-SIZE_BLOCK = 50             # Something
+BSS = 1                     # Ghost step size
+BLOCK_SIZE = 50
 N_BLOCKS = 37               # Total amount of blocks textures
 MM = 0                      # Something
 FULL_SCREEN = True          # Fullscreen parameter
-
-class bullet():
-    def __init__(self, x, y, heading):
-        self.x = x
-        self.y = y
-        self.d = 4
-        self.heading = heading
-
-    def update(self):
-        if self.heading == 0:
-            pass
-        elif self.heading == 1:
-            pass
-        elif self.heading == 2:
-            pass
-        elif self.heading == 3:
-            self
-
-
-class ghost():
-    def __init__(self, x, y, side):
-        self.x = x
-        self.y = y
-        self.side = side
-
-    def update(self):
-        dx = player1.x - self.x
-        dy = player1.y - self.y
-        angle = math.atan2(dy, dx)
-        dx2 = math.cos(angle) * BSS
-        dy2 = math.sin(angle) * BSS
-        self.x += dx2
-        self.y += dy2
 
 
 class guard():
@@ -166,7 +134,7 @@ def add_ghosts():
 
 def ghosts_update(screen):
     for item in arrGhosts:
-        item.update()
+        item.update(player1)
         if (item.side == 'left'):
             screen.blit(ghost_left, (item.x, item.y))
         else:
@@ -181,31 +149,17 @@ def ghosts_update(screen):
 def title_screen(screen):
     if block_pos == 0:
         screen.blit(title0, (0, 0))
-        # pygame.draw.rect(screen, (255, 255, 255), (400, 100, 410, 100))
     elif block_pos == 1:
         screen.blit(title1, (0, 0))
-        # pygame.draw.rect(screen, (255, 255, 255), (400, 210, 415, 150))
     elif block_pos == 2:
         screen.blit(title2, (0, 0))
-        # pygame.draw.rect(screen, (255, 255, 255), (400, 470, 410, 110))
 
-    '''f2 = pygame.font.SysFont('Pixar One', 60)
-    text2 = f2.render("START", 0, (0, 180, 0))
-    screen.blit(text2, (515, 100))
-
-    f4 = pygame.font.SysFont('Pixar One', 48)
-    text4 = f4.render("NEW MAP", 0, (0, 180, 0))
-    screen.blit(text4, (495, 250))
-
-    f3 = pygame.font.SysFont('Pixar One', 48)
-    text3 = f3.render("EXIT", 0, (0, 180, 0))
-    screen.blit(text3, (540, 500))'''
 
 
 def pick(N, m):
     try:
-        if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == N:
-            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] = m
+        if mapp[(player1.y) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] == N:
+            mapp[(player1.y) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] = m
             return 1
         else:
             return 0
@@ -215,12 +169,12 @@ def pick(N, m):
 
 def lever():
     try:
-        if mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 30 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 31 or mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] == 32:
-            for y in range(SIZE[1] // SIZE_BLOCK):
-                for x in range(SIZE[0] // SIZE_BLOCK):
+        if mapp[(player1.y) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] == 30 or mapp[(player1.y) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] == 31 or mapp[(player1.y) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] == 32:
+            for y in range(SIZE[1] // BLOCK_SIZE):
+                for x in range(SIZE[0] // BLOCK_SIZE):
                     if mapp[y, x] == 33:
                         mapp[y, x] = 4
-            mapp[(player1.y) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] += 4
+            mapp[(player1.y) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] += 4
 
     except:
         pass
@@ -248,16 +202,16 @@ def keybind():
 
     elif i.type == pygame.MOUSEBUTTONDOWN and STATE == 'create':
         if i.button == 1:
-            bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
-            by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+            bx = pygame.mouse.get_pos()[0] // BLOCK_SIZE
+            by = pygame.mouse.get_pos()[1] // BLOCK_SIZE
             if mapp[by, bx] == N_BLOCKS:
                 mapp[by, bx] = 0
             else:
                 mapp[by, bx] += 1
 
         elif i.button == 3:
-            bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
-            by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+            bx = pygame.mouse.get_pos()[0] // BLOCK_SIZE
+            by = pygame.mouse.get_pos()[1] // BLOCK_SIZE
             if mapp[by, bx] == 0:
                 mapp[by, bx] = N_BLOCKS
             else:
@@ -281,8 +235,8 @@ def keybind():
                 elif block_pos == 2:
                     done = True
             elif STATE == 'create':
-                bx = pygame.mouse.get_pos()[0] // SIZE_BLOCK
-                by = pygame.mouse.get_pos()[1] // SIZE_BLOCK
+                bx = pygame.mouse.get_pos()[0] // BLOCK_SIZE
+                by = pygame.mouse.get_pos()[1] // BLOCK_SIZE
                 mapp[by, bx] = 0
 
             else:
@@ -373,10 +327,10 @@ if __name__ == "__main__":
     screen = pygame.Surface(SIZE, pygame.SRCALPHA)
 
     try:
-        arrMap = np.load('neww.npy')
+        arrMap = np.load('map.npy')
         mapp = arrMap[0]
     except:
-        mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
+        mapp = np.zeros((SIZE[1] // BLOCK_SIZE, SIZE[0] // BLOCK_SIZE))
 
     image_back = pygame.image.load('textures/guard0.png')
     image_right = pygame.image.load('textures/guard1.png')
@@ -441,24 +395,26 @@ if __name__ == "__main__":
             keybind()
         try:
             if up == True:
-                if mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango and mapp[(player1.y - 1) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango:
+                if mapp[(player1.y - 1) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] in cango and mapp[(player1.y - 1) // BLOCK_SIZE, (player1.x + 39) // BLOCK_SIZE] in cango:
                     player1.y -= SS
             if right == True:
-                if mapp[(player1.y) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x + 40) // SIZE_BLOCK] in cango:
+                if mapp[(player1.y) // BLOCK_SIZE, (player1.x + 40) // BLOCK_SIZE] in cango and mapp[(player1.y + 39) // BLOCK_SIZE, (player1.x + 40) // BLOCK_SIZE] in cango:
                     if player1.x > SIZE[0] - 100 and MM != 5:
                         MM += 1
                         mapp = arrMap[MM]
                         player1.x = 10
+                        arrGhosts = []
                     player1.x += SS
             if down == True:
-                if mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x + 39) // SIZE_BLOCK] in cango and mapp[(player1.y + 40) // SIZE_BLOCK, (player1.x) // SIZE_BLOCK] in cango:
+                if mapp[(player1.y + 40) // BLOCK_SIZE, (player1.x + 39) // BLOCK_SIZE] in cango and mapp[(player1.y + 40) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] in cango:
                     player1.y += SS
             if left == True:
-                if mapp[(player1.y) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango and mapp[(player1.y + 39) // SIZE_BLOCK, (player1.x - 1) // SIZE_BLOCK] in cango:
+                if mapp[(player1.y) // BLOCK_SIZE, (player1.x - 1) // BLOCK_SIZE] in cango and mapp[(player1.y + 39) // BLOCK_SIZE, (player1.x - 1) // BLOCK_SIZE] in cango:
                     if player1.x < 20 and MM != 0:
                         MM -= 1
                         mapp = arrMap[MM]
                         player1.x = SIZE[0] - 30
+                        arrGhosts = []
                     player1.x -= SS
         except:
             pass
@@ -481,10 +437,8 @@ if __name__ == "__main__":
             lever()
             
             screen_.fill
-            # screen.blit(imag, (0, 0))
-            # screen_.blit(imag, (0, 0))
-            map_builder(screen_, mapp, fl, MM)
-            map_builder(screen, mapp, fl, MM)
+            build_map(screen_, mapp, fl, MM, SIZE)
+            build_map(screen, mapp, fl, MM, SIZE)
             add_ghosts()
             ghosts_update(screen)
             ghosts_update(screen_)
@@ -494,15 +448,15 @@ if __name__ == "__main__":
             drawenergy(player1.energy)
             drawcrystals(player1.diamonds)
         elif STATE == 'create':
-            map_builder(screen, mapp, fl, MM)
-            np.save('neww', arrMap)
+            build_map(screen, mapp, fl, MM)
+            np.save('map', arrMap)
         elif STATE == 'died':
             arrGhosts = []
             player1.lives = 3
             try:
-                mapp = np.load('neww.npy')
+                mapp = np.load('map.npy')
             except:
-                mapp = np.zeros((SIZE[1] // SIZE_BLOCK, SIZE[0] // SIZE_BLOCK))
+                mapp = np.zeros((SIZE[1] // BLOCK_SIZE, SIZE[0] // BLOCK_SIZE))
             f3 = pygame.font.SysFont('Pixar One', 48)
             screen.fill(BG_COLOR)
             text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
