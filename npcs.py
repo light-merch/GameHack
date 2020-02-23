@@ -13,7 +13,7 @@ class bullet():
     def __init__(self, x, y, heading):
         self.x = x
         self.y = y
-        self.d = 4
+        self.delta = 4
         self.heading = heading
 
     def update(self):

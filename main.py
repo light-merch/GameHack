@@ -16,9 +16,9 @@ START_X = 50                # Guard start coordinate
 START_Y = 150               # Guard start coordinate
 SS = 6                      # Step size
 BSS = 1                     # Ghost step size
-BLOCK_SIZE = 50
+BLOCK_SIZE = 50             # Block size
 N_BLOCKS = 37               # Total amount of blocks textures
-MM = 0                      # Something
+MM = 0                      # Screen number
 FULL_SCREEN = True          # Fullscreen parameter
 
 
@@ -263,7 +263,10 @@ def keybind():
                     block_pos += 1
 
         else:
-            if i.key == pygame.K_w:
+            if i.key == pygame.K_e:
+                arrBullets.append(bullet(player1.x, player1.y, 0))
+
+            elif i.key == pygame.K_w:
                 up = True
                 player1.rot = 0
                 image = image_back
@@ -387,6 +390,7 @@ if __name__ == "__main__":
     powerups = [19, 20, 21, 22, 23, 24, 25, 30, 31, 32]
     cango = [1, 2, 3, 4] + powerups
     arrGhosts = []
+    arrBullets = []
     done = False
     STATE = 'title'
     while not done:
@@ -448,7 +452,7 @@ if __name__ == "__main__":
             drawenergy(player1.energy)
             drawcrystals(player1.diamonds)
         elif STATE == 'create':
-            build_map(screen, mapp, fl, MM)
+            build_map(screen, mapp, fl, MM, SIZE)
             np.save('map', arrMap)
         elif STATE == 'died':
             arrGhosts = []
