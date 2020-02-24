@@ -1,4 +1,5 @@
 import datetime
+import os
 from random import randint
 import time
 import math
@@ -19,7 +20,7 @@ BSS = 1                     # Ghost step size
 BLOCK_SIZE = 50             # Block size
 N_BLOCKS = 37               # Total amount of blocks textures
 MM = 0                      # Screen number
-FULL_SCREEN = True          # Fullscreen parameter
+FULL_SCREEN = False          # Fullscreen parameter
 
 
 class guard():
@@ -148,11 +149,11 @@ def ghosts_update(screen):
 
 def title_screen(screen):
     if block_pos == 0:
-        screen.blit(title0, (0, 0))
+        screen.blit(textures['title0'], (0, 0))
     elif block_pos == 1:
-        screen.blit(title1, (0, 0))
+        screen.blit(textures['title1'], (0, 0))
     elif block_pos == 2:
-        screen.blit(title2, (0, 0))
+        screen.blit(textures['title2'], (0, 0))
 
 
 
@@ -306,17 +307,17 @@ def keybind():
 
 def drawhearts(lives):
     for i in range(lives):
-        screen.blit(heart, (10 + i * 60, 10))
+        screen.blit(textures['heart_icon'], (10 + i * 60, 10))
 
 
 def drawenergy(energy):
     for i in range(energy):
-        screen.blit(batt, (10 + i * 60, 70))
+        screen.blit(textures['battery_icon'], (10 + i * 60, 70))
 
 
 def drawcrystals(count):
     for i in range(count):
-        screen.blit(crys, (10 + i * 60, 130))
+        screen.blit(textures['diamond_icon'], (10 + i * 60, 130))
 
 
 if __name__ == "__main__":
@@ -335,12 +336,14 @@ if __name__ == "__main__":
     except:
         mapp = np.zeros((SIZE[1] // BLOCK_SIZE, SIZE[0] // BLOCK_SIZE))
 
-    image_back = pygame.image.load('textures/guard0.png')
-    image_right = pygame.image.load('textures/guard1.png')
-    image_front = pygame.image.load('textures/guard2.png')
-    image_left = pygame.image.load('textures/guard3.png')
-    ghost_right = pygame.image.load('textures/ghost1.png')
-    ghost_left = pygame.image.load('textures/ghost2.png')
+    textures = {block.replace('.png', ''): pygame.image.load(f'textures/{block}') for block in os.listdir('textures')}
+    
+    image_back = textures['guard_back']
+    image_right = textures['guard_right']
+    image_front = textures['guard_front']
+    image_left = textures['guard_left']
+    ghost_right = textures['ghost_to_right']
+    ghost_left = textures['ghost_to_left']
     image = image_front
 
     try:
@@ -350,45 +353,15 @@ if __name__ == "__main__":
         cool_down = time.process_time()
         cdfl = time.process_time()
 
-    fl = []
-    fl.append(pygame.image.load('textures/floor.png'))
-    fl.append(pygame.image.load('textures/floor2.png'))
-    fl.append(pygame.image.load('textures/floor3.png'))
-    fl.append(pygame.image.load('textures/door.png'))
-    for i in range(15):
-        fl.append(pygame.image.load('textures/block' + str(i + 1) + '.png'))
-    fl.append(pygame.image.load('textures/gun.png'))
-    fl.append(pygame.image.load('textures/hp.png'))
-    fl.append(pygame.image.load('textures/hp2.png'))
-    fl.append(pygame.image.load('textures/battery.png'))
-    fl.append(pygame.image.load('textures/battery2.png'))
-    fl.append(pygame.image.load('textures/diamond2.png'))
-    fl.append(pygame.image.load('textures/diamond1.png'))
-    fl.append(pygame.image.load('textures/sculpt3.png'))
-    fl.append(pygame.image.load('textures/sculpt4.png'))
-    fl.append(pygame.image.load('textures/sculpt7.png'))
-    fl.append(pygame.image.load('textures/lever1.png'))
-    fl.append(pygame.image.load('textures/lever2.png'))
-    fl.append(pygame.image.load('textures/lever3.png'))
-    fl.append(pygame.image.load('textures/door_locked.png'))
-    fl.append(pygame.image.load('textures/lever7.png'))
-    fl.append(pygame.image.load('textures/lever6.png'))
-    fl.append(pygame.image.load('textures/lever5.png'))
-    fl.append(pygame.image.load('textures/chest.png'))
-    heart = pygame.image.load('textures/heart.png')
-    batt = pygame.image.load('textures/batticon.png')
-    crys = pygame.image.load('textures/icondiamond.png')
-
-    title0 = pygame.image.load('textures/title0.png')
-    title1 = pygame.image.load('textures/title1.png')
-    title2 = pygame.image.load('textures/title2.png')
+    
 
     player1 = guard(START_X, START_Y)
     fps = 1000
     block_pos = 0
     left, right, up, down = False, False, False, False
-    powerups = [19, 20, 21, 22, 23, 24, 25, 30, 31, 32]
-    cango = [1, 2, 3, 4] + powerups
+    powerups = ['battery_planks','battery_stone','chest','crystal','diamond','gun','hp_planks','hp_stone','lever_planks',
+                'lever_planks_inverted','lever_safe','lever_safe_inverted','lever_stone','lever_stone_inverted']
+    cango = ['door', 'floor_planks.png', 'floor_safe', 'floor_stone'] + powerups
     arrGhosts = []
     arrBullets = []
     done = False
@@ -441,8 +414,8 @@ if __name__ == "__main__":
             lever()
             
             screen_.fill
-            build_map(screen_, mapp, fl, MM, SIZE)
-            build_map(screen, mapp, fl, MM, SIZE)
+            build_map(screen_, mapp, textures, MM, SIZE)
+            build_map(screen, mapp, textures, MM, SIZE)
             add_ghosts()
             ghosts_update(screen)
             ghosts_update(screen_)
@@ -452,7 +425,7 @@ if __name__ == "__main__":
             drawenergy(player1.energy)
             drawcrystals(player1.diamonds)
         elif STATE == 'create':
-            build_map(screen, mapp, fl, MM, SIZE)
+            build_map(screen, mapp, textures, MM, SIZE)
             np.save('map', arrMap)
         elif STATE == 'died':
             arrGhosts = []
@@ -465,6 +438,7 @@ if __name__ == "__main__":
             screen.fill(BG_COLOR)
             text3 = f3.render("YOU DIED!", 0, (0, 180, 0))
             screen.blit(text3, (540, 500))
+            screen_.blit(screen, (0, 0))
             pygame.display.flip()
             pygame.time.wait(1000)
             STATE = 'title'

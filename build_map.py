@@ -20,8 +20,6 @@ def build_map(screen, mapp, floors, N, SIZE):
 
     for y in range(SIZE[1] // SIZE_BLOCK):
         for x in range(SIZE[0] // SIZE_BLOCK):
-            for i in range(N_BLOCKS):
-                if mapp[y, x] == i + 1:
-                    screen.blit(floors[i], (x * SIZE_BLOCK, y * SIZE_BLOCK))
+            screen.blit(floors[mapp[y, x]], (x * SIZE_BLOCK, y * SIZE_BLOCK))
 
     # pygame.image.save(screen, 'screen' + str(N) + '.png')
