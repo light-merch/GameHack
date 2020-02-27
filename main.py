@@ -27,12 +27,15 @@ class guard():
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.step = SS
         self.rot = 0
         self.bulb = False
         self.lives = 3
         self.shots = 0
         self.energy = 10
         self.diamonds = 0
+        self.width = 40
+        self.height = 40
         try:
             self.cdfl = time.clock()
         except:
@@ -118,6 +121,48 @@ class guard():
                             screen.set_at((player1.x - j + 23, player1.y + i + 30),
                                           (255, 228, 0, 255/2 - (i * j) / 255))
 
+    def move(self, step = None):
+        global image, MM, mapp, arrGhosts
+        if step == None: step = self.step
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            player1.rot = 0
+            image = image_back
+            for locstep in range(step,0,-1):
+                if mapp[(self.y - locstep) // BLOCK_SIZE, (self.x) // BLOCK_SIZE] in cango and mapp[(self.y - locstep) // BLOCK_SIZE, (self.x + self.width) // BLOCK_SIZE] in cango:
+                    self.y -= locstep
+                    break
+        if keys[pygame.K_d]:
+            player1.rot = 1
+            image = image_right
+            for locstep in range(step,0,-1):
+                if mapp[(self.y) // BLOCK_SIZE, (self.x + self.width + locstep) // BLOCK_SIZE] in cango and mapp[(self.y + self.height) // BLOCK_SIZE, (self.x + self.width + locstep) // BLOCK_SIZE] in cango:
+                    self.x += locstep
+                    if player1.x > SIZE[0] - 100 and MM != 5:
+                        MM += 1
+                        mapp = arrMap[MM]
+                        self.x = 10
+                        arrGhosts = []
+                    break
+        if keys[pygame.K_s]:
+            player1.rot = 2
+            image = image_front
+            for locstep in range(step,0,-1):
+                if mapp[(self.y + self.height + locstep) // BLOCK_SIZE, (self.x + self.width) // BLOCK_SIZE] in cango and mapp[(self.y + self.height + locstep) // BLOCK_SIZE, (self.x) // BLOCK_SIZE] in cango:
+                    self.y += locstep
+                    break
+        if keys[pygame.K_a]:
+            player1.rot = 3
+            image = image_left
+            for locstep in range(step,0,-1):
+                if mapp[(self.y) // BLOCK_SIZE, (self.x - locstep) // BLOCK_SIZE] in cango and mapp[(self.y + self.height) // BLOCK_SIZE, (self.x - locstep) // BLOCK_SIZE] in cango:
+                    self.x -= locstep
+                    if player1.x < 20 and MM != 0:
+                        MM -= 1
+                        mapp = arrMap[MM]
+                        self.x = SIZE[0] - 30
+                        arrGhosts = []
+                    break
 
 def add_ghosts():
     if (randint(0, 80) == 1):
@@ -266,23 +311,6 @@ def keybind():
         else:
             if i.key == pygame.K_e:
                 arrBullets.append(bullet(player1.x, player1.y, 0))
-
-            elif i.key == pygame.K_w:
-                up = True
-                player1.rot = 0
-                image = image_back
-            elif i.key == pygame.K_s:
-                down = True
-                player1.rot = 2
-                image = image_front
-            elif i.key == pygame.K_a:
-                left = True
-                player1.rot = 3
-                image = image_left
-            elif i.key == pygame.K_d:
-                right = True
-                player1.rot = 1
-                image = image_right
             elif i.key == pygame.K_h:
                 if MM != 0:
                     MM -= 1
@@ -293,16 +321,6 @@ def keybind():
                 else:
                     MM += 1
                 mapp = arrMap[MM]
-
-    elif i.type == pygame.KEYUP:
-        if i.key == pygame.K_w:
-            up = False
-        elif i.key == pygame.K_s:
-            down = False
-        elif i.key == pygame.K_a:
-            left = False
-        elif i.key == pygame.K_d:
-            right = False
 
 
 def drawhearts(lives):
@@ -361,7 +379,7 @@ if __name__ == "__main__":
     left, right, up, down = False, False, False, False
     powerups = ['battery_planks','battery_stone','chest','crystal','diamond','gun','hp_planks','hp_stone','lever_planks',
                 'lever_planks_inverted','lever_safe','lever_safe_inverted','lever_stone','lever_stone_inverted']
-    cango = ['door', 'floor_planks.png', 'floor_safe', 'floor_stone'] + powerups
+    cango = ['door', 'floor_planks', 'floor_safe', 'floor_stone'] + powerups
     arrGhosts = []
     arrBullets = []
     done = False
@@ -369,33 +387,7 @@ if __name__ == "__main__":
     while not done:
         screen.fill(BG_COLOR)
         for i in pygame.event.get():  # events
-            keybind()
-        try:
-            if up == True:
-                if mapp[(player1.y - 1) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] in cango and mapp[(player1.y - 1) // BLOCK_SIZE, (player1.x + 39) // BLOCK_SIZE] in cango:
-                    player1.y -= SS
-            if right == True:
-                if mapp[(player1.y) // BLOCK_SIZE, (player1.x + 40) // BLOCK_SIZE] in cango and mapp[(player1.y + 39) // BLOCK_SIZE, (player1.x + 40) // BLOCK_SIZE] in cango:
-                    if player1.x > SIZE[0] - 100 and MM != 5:
-                        MM += 1
-                        mapp = arrMap[MM]
-                        player1.x = 10
-                        arrGhosts = []
-                    player1.x += SS
-            if down == True:
-                if mapp[(player1.y + 40) // BLOCK_SIZE, (player1.x + 39) // BLOCK_SIZE] in cango and mapp[(player1.y + 40) // BLOCK_SIZE, (player1.x) // BLOCK_SIZE] in cango:
-                    player1.y += SS
-            if left == True:
-                if mapp[(player1.y) // BLOCK_SIZE, (player1.x - 1) // BLOCK_SIZE] in cango and mapp[(player1.y + 39) // BLOCK_SIZE, (player1.x - 1) // BLOCK_SIZE] in cango:
-                    if player1.x < 20 and MM != 0:
-                        MM -= 1
-                        mapp = arrMap[MM]
-                        player1.x = SIZE[0] - 30
-                        arrGhosts = []
-                    player1.x -= SS
-        except:
-            pass
-        
+            keybind()        
         pygame.time.wait(1000 // fps)
         if STATE == 'title':
             screen.fill(BG_COLOR)
@@ -420,6 +412,7 @@ if __name__ == "__main__":
             ghosts_update(screen)
             ghosts_update(screen_)
             player1.update(screen)
+            player1.move(10)
             screen.blit(image, (player1.x, player1.y))
             drawhearts(player1.lives)
             drawenergy(player1.energy)
